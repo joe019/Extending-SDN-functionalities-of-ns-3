@@ -13,7 +13,7 @@
 // - DropTail queues
 // - Tracing of queues and packet receptions to file "openflow-switch.tr"
 // - If order of adding nodes and netdevices is kept:
-//      n0 = 00:00:00;00:00:01, n1 = 00:00:00:00:00:03, n3 = 00:00:00:00:00:07
+//      n0 = 00:00:00:00:00:01, n1 = 00:00:00:00:00:03, n3 = 00:00:00:00:00:07
 //	and port number corresponds to node number, so port 0 is connected to n0, for example
 
 #include <iostream>
