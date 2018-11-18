@@ -8,3 +8,7 @@ def build(bld):
    obj = bld.create_ns3_program('example1',
                                 ['openflow', 'csma', 'internet', 'applications'])
    obj.source = 'example1.cc'
+
+   obj = bld.create_ns3_program('example-final',
+                                ['openflow', 'csma', 'internet', 'applications'])
+   obj.source = 'example-final.cc'
