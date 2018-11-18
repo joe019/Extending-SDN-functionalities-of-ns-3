@@ -475,7 +475,10 @@ protected:
   };
   Time m_expirationTime;                ///< Time it takes for learned MAC state entry/created flow to expire.
   typedef std::map<Mac48Address, LearnedState> LearnState_t;
-  LearnState_t m_learnState;            ///< Learned state data.
+  typedef std::map<Mac48Address,uint32_t> broadcast_flags;
+  LearnState_t m_learnState,m_learnState_UDP ;            ///< Learned state data.
+  broadcast_flags broadcast_done;
+
 };
 
 /**

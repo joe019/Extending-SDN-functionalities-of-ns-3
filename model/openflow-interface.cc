@@ -810,6 +810,8 @@ TypeId LearningController::GetTypeId (void)
 void
 LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbuf* buffer)
 {
+
+        
   if (m_switches.find (swtch) == m_switches.end ())
     {
       NS_LOG_ERROR ("Can't receive from this switch, not registered to the Controller.");
@@ -820,7 +822,7 @@ LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbu
   uint8_t type = GetPacketType (buffer);
   if (type == OFPT_PACKET_IN) // The switch didn't understand the packet it received, so it forwarded it to the controller.
     {
-      ofp_packet_in * opi = (ofp_packet_in*)ofpbuf_try_pull (buffer, offsetof (ofp_packet_in, data));
+          ofp_packet_in * opi = (ofp_packet_in*)ofpbuf_try_pull (buffer, offsetof (ofp_packet_in, data));
       int port = ntohs (opi->in_port);
         //NS_LOG_INFO ("tttttttttt"<<buffer);
       // Create matching key.
@@ -833,23 +835,53 @@ LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbu
       uint16_t in_port = ntohs (key.flow.in_port);
         NS_LOG_INFO ("UDPSRC_______"<<key.flow.tp_src);
          NS_LOG_INFO ("Dest_______"<<key.flow.tp_dst);
-      // If the destination address is learned to a specific port, find it.
+     // If the destination address is learned to a specific port, find it.
       Mac48Address dst_addr;
       dst_addr.CopyFrom (key.flow.dl_dst);
       if (!dst_addr.IsBroadcast ())
         {
-          LearnState_t::iterator st = m_learnState.find (dst_addr);
-          if (st != m_learnState.end ())
-            {
-              out_port = st->second.port;
-            }
-          else
-            {
-              NS_LOG_INFO ("Setting to flood; don't know yet what port " << dst_addr << " is connected to");
-            }
+        if(key.flow.in_port==0)
+          {
+                LearnState_t::iterator st = m_learnState.find(dst_addr);
+                  if (st != m_learnState.end ())
+                    {
+                      out_port = st->second.port;
+                    }
+                  else
+                    {
+                      NS_LOG_INFO ("Setting to flood; don't know yet what port " << dst_addr << " is connected to");
+                    }
+          }
+        else
+                {
+                   LearnState_t::iterator st = m_learnState_UDP.find (dst_addr);
+                  if (st != m_learnState.end ())
+                    {
+                      out_port = st->second.port;
+                    }
+                  else
+                    {
+                      NS_LOG_INFO ("Setting to flood; don't know yet what port " << dst_addr << " is connected to");
+                    }
+
+                }
         }
       else
         {
+                Mac48Address src_addr;
+                src_addr.CopyFrom (key.flow.dl_src);
+                broadcast_flags::iterator bd=broadcast_done.find(src_addr);
+                if (bd==broadcast_done.end())
+                {
+                        broadcast_done.insert(std::make_pair(src_addr,1));
+                        
+                }
+                else
+                {
+                        return;
+                }
+
+
           NS_LOG_INFO ("Setting to flood; this packet is a broadcast");
         }
         NS_LOG_INFO ("ttt"<<out_port);
@@ -867,11 +899,14 @@ LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbu
       Mac48Address src_addr;
       src_addr.CopyFrom (key.flow.dl_src);
       LearnState_t::iterator st = m_learnState.find (src_addr);
-      if (st == m_learnState.end ()) // We haven't learned our source MAC yet.
+      if (st == m_learnState.end ()) // We haven't learned our source MAC yet. either TCP or UDP update the port
         {
           LearnedState ls;
           ls.port = in_port;
+         
           m_learnState.insert (std::make_pair (src_addr,ls));
+          m_learnState_UDP.insert(std::make_pair (src_addr,ls));
+        
           NS_LOG_INFO ("Learned that " << src_addr << " can be found over port " << in_port);
 
           // Learn src_addr goes to a certain port.
@@ -887,22 +922,31 @@ LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbu
           ofp_flow_mod* ofm2 = BuildFlow (key, -1, OFPFC_MODIFY, x2, sizeof(x2), OFP_FLOW_PERMANENT, m_expirationTime.IsZero () ? OFP_FLOW_PERMANENT : m_expirationTime.GetSeconds ());
           SendToSwitch (swtch, ofm2, ofm2->header.length);
         }
-        else
+        else //if we have already know the source MAC then update the mac address
           {
-          st->second.port=in_port;
-          NS_LOG_INFO ("Updated that " << src_addr << " can be found over port " << in_port);
-          // Learn src_addr goes to a certain port.
-          ofp_action_output x2[1];
-          x2[0].type = htons (OFPAT_OUTPUT);
-          x2[0].len = htons (sizeof(ofp_action_output));
-          x2[0].port = in_port;
 
-          // Switch MAC Addresses and ports to the flow we're modifying
-          src_addr.CopyTo (key.flow.dl_dst);
-          dst_addr.CopyTo (key.flow.dl_src);
-          key.flow.in_port = out_port;
-          ofp_flow_mod* ofm2 = BuildFlow (key, -1, OFPFC_MODIFY, x2, sizeof(x2), OFP_FLOW_PERMANENT, m_expirationTime.IsZero () ? OFP_FLOW_PERMANENT : m_expirationTime.GetSeconds ());
-          SendToSwitch (swtch, ofm2, ofm2->header.length);
+
+               ///if the type of Packets is TCP take LOnger Path
+                  LearnState_t::iterator st = m_learnState_UDP.find (src_addr);
+                  if(key.flow.tp_src!=0)
+                  {
+                         
+                         NS_LOG_INFO ("Updated that " << src_addr << "already found in "<<st->second.port<< " updated to port " << in_port);
+                        st->second.port=in_port;
+                  // Learn src_addr goes to a certain port.
+                          ofp_action_output x2[1];
+                          x2[0].type = htons (OFPAT_OUTPUT);
+                          x2[0].len = htons (sizeof(ofp_action_output));
+                          x2[0].port = in_port;
+
+                          // Switch MAC Addresses and ports to the flow we're modifying
+                          src_addr.CopyTo (key.flow.dl_dst);
+                          dst_addr.CopyTo (key.flow.dl_src);
+                          key.flow.in_port = out_port;
+                          ofp_flow_mod* ofm2 = BuildFlow (key, -1, OFPFC_MODIFY, x2, sizeof(x2), OFP_FLOW_PERMANENT, m_expirationTime.IsZero () ? OFP_FLOW_PERMANENT : m_expirationTime.GetSeconds ());
+                          SendToSwitch (swtch, ofm2, ofm2->header.length);
+
+                   }
 
         }
 
