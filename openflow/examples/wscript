@@ -4,3 +4,7 @@ def build(bld):
    obj = bld.create_ns3_program('openflow-switch',
                                 ['openflow', 'csma', 'internet', 'applications'])
    obj.source = 'openflow-switch.cc'
+
+   obj = bld.create_ns3_program('example1',
+                                ['openflow', 'csma', 'internet', 'applications'])
+   obj.source = 'example1.cc'

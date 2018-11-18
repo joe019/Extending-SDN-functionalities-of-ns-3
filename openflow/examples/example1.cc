@@ -150,22 +150,123 @@ main (int argc, char *argv[])
   Ptr<ns3::ofi::LearningController> controller = CreateObject<ns3::ofi::LearningController> ();
    if (!timeout.IsZero ()) controller->SetAttribute ("ExpirationTime", TimeValue (timeout));
     
-Ptr<ns3::ofi::LearningController> controller2 = CreateObject<ns3::ofi::LearningController> ();
-   if (!timeout.IsZero ()) controller2->SetAttribute ("ExpirationTime", TimeValue (timeout));
-    
+
   Ptr<Node> switchNode1 = csmaSwitch.Get (0);
   OpenFlowSwitchHelper swtch1;
   
 
   Ptr<Node> switchNode2 = csmaSwitch.Get (1);
   OpenFlowSwitchHelper swtch2;
-  
+
+  Ptr<ns3::ofi::LearningController> cont2 = CreateObject<ns3::ofi::LearningController> ();
+  if (!timeout.IsZero ()) cont2->SetAttribute ("ExpirationTime", TimeValue (timeout));
+
+
   swtch1.Install (switchNode1, switchDevices1, controller);
-  swtch2.Install (switchNode2, switchDevices2, controller2);
+  swtch2.Install (switchNode2, switchDevices2, cont2);
 
 
+ 
+
+
+
+
+
+
+
+  InternetStackHelper internet;
+  internet.Install (terminals);
   
-  // PointToPointHelper pointToPoint;
+
+  NS_LOG_INFO ("Assign IP Addresses.");
+  Ipv4AddressHelper ipv4;
+  ipv4.SetBase ("10.1.1.0", "255.255.255.0");
+  ipv4.Assign (terminalDevices);
+
+  // Create an OnOff application to send UDP datagrams from n0 to n1.
+  NS_LOG_INFO ("Create Applications.");
+  uint16_t port = 9;   // Discard port (RFC 863)
+
+  OnOffHelper onoff ("ns3::UdpSocketFactory",
+                     Address (InetSocketAddress (Ipv4Address ("10.1.1.2"), port)));
+  onoff.SetConstantRate (DataRate ("1kb/s"));
+
+  ApplicationContainer app = onoff.Install (terminals.Get (0));
+  // Start the application
+  app.Start (Seconds (1.0));
+  app.Stop (Seconds (10.0));
+
+  // Create an optional packet sink to receive these packets
+  PacketSinkHelper sink ("ns3::UdpSocketFactory",
+                         Address (InetSocketAddress (Ipv4Address::GetAny (), port)));
+  app = sink.Install (terminals.Get (1));
+  app.Start (Seconds (0.0));
+
+  //
+  // Create a similar flow from n3 to n0, starting at time 1.1 seconds
+  //
+  onoff.SetAttribute ("Remote",
+                      AddressValue (InetSocketAddress (Ipv4Address ("10.1.1.1"), port)));
+  app = onoff.Install (terminals.Get (3));
+  app.Start (Seconds (1.1));
+  app.Stop (Seconds (10.0));
+
+  app = sink.Install (terminals.Get (0));
+  app.Start (Seconds (0.0));
+
+  NS_LOG_INFO ("Configure Tracing.");
+
+  //
+  // Configure tracing of all enqueue, dequeue, and NetDevice receive events.
+  // Trace output will be sent to the file "openflow-switch.tr"
+  //
+  AsciiTraceHelper ascii;
+  csma.EnableAsciiAll (ascii.CreateFileStream ("openflow-switch.tr"));
+
+  //
+  // Also configure some tcpdump traces; each interface will be traced.
+  // The output files will be named:
+  //     openflow-switch-<nodeId>-<interfaceId>.pcap
+  // and can be read by the "tcpdump -r" command (use "-tt" option to
+  // display timestamps correctly)
+  //
+  csma.EnablePcapAll ("openflow-switch", false);
+
+  //
+  // Now, do the actual simulation.
+  //
+  NS_LOG_INFO ("Run Simulation.");
+  Simulator::Run ();
+  Simulator::Destroy ();
+  NS_LOG_INFO ("Done.");
+  #else
+  NS_LOG_INFO ("NS-3 OpenFlow is not enabled. Cannot run simulation.");
+  #endif // NS3_OPENFLOW
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*// PointToPointHelper pointToPoint;
   // pointToPoint.SetDeviceAttribute ("DataRate", StringValue ("5Mbps"));
   // pointToPoint.SetChannelAttribute ("Delay", StringValue ("2ms"));
 
@@ -182,7 +283,6 @@ Ptr<ns3::ofi::LearningController> controller2 = CreateObject<ns3::ofi::LearningC
   Ipv4AddressHelper ipv4;
   ipv4.SetBase ("10.1.1.0", "255.255.255.0");
   ipv4.Assign (terminalDevices);
-
   // ipv4.Assign(terminalDevices2);
    
   // Ipv4AddressHelper ipv42; 
@@ -191,77 +291,51 @@ Ptr<ns3::ofi::LearningController> controller2 = CreateObject<ns3::ofi::LearningC
   
   // // Create an OnOff application to send UDP datagrams from n0 to n1.
   // NS_LOG_INFO ("Create Applications.");
-  // uint16_t port = 9;   // Discard port (RFC 863)
+  uint16_t port = 9;   // Discard port (RFC 863)
 
-  // OnOffHelper onoff ("ns3::UdpSocketFactory",
-  //                    Address (InetSocketAddress (Ipv4Address ("10.1.1.0"), port)));
-  // onoff.SetConstantRate (DataRate ("5kb/s"));
+  OnOffHelper onoff ("ns3::UdpSocketFactory",
+                     Address (InetSocketAddress (Ipv4Address ("10.1.1.0"), port)));
+  onoff.SetConstantRate (DataRate ("5kb/s"));
 
-  // ApplicationContainer app = onoff.Install (terminals.Get (2));
-  // // Start the application
-  // app.Start (Seconds (1.0));
-  // app.Stop (Seconds (10.0));
+  ApplicationContainer app = onoff.Install (terminals.Get (2));
+ 	  // Start the application
+  app.Start (Seconds (1.0));
+  app.Stop (Seconds (10.0));
 
-  // // Create an optional packet sink to receive these packets
-  // PacketSinkHelper sink ("ns3::UdpSocketFactory",
-  //                        Address (InetSocketAddress (Ipv4Address::GetAny (), port)));
-  // app = sink.Install (terminals.Get (1));
-  // app.Start (Seconds (0.0));
+  // Create an optional packet sink to receive these packets
+  PacketSinkHelper sink ("ns3::UdpSocketFactory",
+                         Address (InetSocketAddress (Ipv4Address::GetAny (), port)));
+  app = sink.Install (terminals.Get (1));
+  app.Start (Seconds (0.0));
 
-  // app = sink.Install (terminals.Get (0));
-  // app.Start (Seconds (0.0));
+  app = sink.Install (terminals.Get (0));
+  app.Start (Seconds (0.0));
 
    
-NS_LOG_INFO ("Create Applications.");
+// NS_LOG_INFO ("Create Applications.");
 
 
-//Create a BulkSendApplication and install it on node 0
+// //Create a BulkSendApplication and install it on node 0
 
-  uint16_t port = 9;  // well-known echo port number
+//   uint16_t port = 9;  // well-known echo port number
 
-  //terminals.Get(0).Ipv4Address()
-  BulkSendHelper source ("ns3::TcpSocketFactory",
-                         InetSocketAddress (Ipv4Address("10.1.1.1"), port));
-  // Set the amount of data to send in bytes.  Zero is unlimited.
-  source.SetAttribute ("MaxBytes", UintegerValue (10));
-  ApplicationContainer sourceApps = source.Install (terminals.Get (2));
-  sourceApps.Start (Seconds (1.0));
-  sourceApps.Stop (Seconds (10.0));
+//   //terminals.Get(0).Ipv4Address()
+//   BulkSendHelper source ("ns3::TcpSocketFactory",
+//                          InetSocketAddress (Ipv4Address("10.1.1.1"), port));
+//   // Set the amount of data to send in bytes.  Zero is unlimited.
+//   source.SetAttribute ("MaxBytes", UintegerValue (10));
+//   ApplicationContainer sourceApps = source.Install (terminals.Get (2));
+//   sourceApps.Start (Seconds (0.0));
+//   sourceApps.Stop (Seconds (10.0));
 
 //
 // Create a PacketSinkApplication and install it on node 1
 //
-  PacketSinkHelper sink ("ns3::TcpSocketFactory",
-                         InetSocketAddress (Ipv4Address::GetAny (), port));
-  ApplicationContainer sinkApps = sink.Install (terminals.Get (2));
-  sinkApps.Start (Seconds (0.0));
-  sinkApps.Stop (Seconds (10.0));
-
-//UDP Socket
-
-  OnOffHelper onoff ("ns3::UdpSocketFactory",
-                     Address (InetSocketAddress (Ipv4Address ("10.1.1.1"), port)));
-  onoff.SetConstantRate (DataRate ("5kb/s"));
-
-  ApplicationContainer app1 = onoff.Install (terminals.Get (2));
-  // Start the application
-  app1.Start (Seconds (0.0));
-  app1.Stop (Seconds (1.9));
-
-  // Create an optional packet sink to receive these packets
-  PacketSinkHelper sink1 ("ns3::UdpSocketFactory",
-                         Address (InetSocketAddress (Ipv4Address::GetAny (), port)));
-  app1 = sink1.Install (terminals.Get (1));
-  app1.Start (Seconds (0.0));
-
-
-
-
-
-
-
-
-
+  // PacketSinkHelper sink ("ns3::TcpSocketFactory",
+  //                        InetSocketAddress (Ipv4Address::GetAny (), port));
+  // ApplicationContainer sinkApps = sink.Install (terminals.Get (2));
+  // sinkApps.Start (Seconds (0.0));
+  // sinkApps.Stop (Seconds (10.0));
 
 
 //    NS_LOG_INFO ("Configure Tracing.");
@@ -293,3 +367,4 @@ NS_LOG_INFO ("Create Applications.");
   NS_LOG_INFO ("NS-3 OpenFlow is not enabled. Cannot run simulation.");
   #endif // NS3_OPENFLOW
 }
+*/
