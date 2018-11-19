@@ -107,7 +107,7 @@ main (int argc, char *argv[])
   //
   NS_LOG_INFO ("Create nodes.");
   NodeContainer terminals;
-  terminals.Create (2);
+  terminals.Create (3);
 
   NodeContainer csmaSwitch;
   csmaSwitch.Create (3);
@@ -146,7 +146,11 @@ NetDeviceContainer switchDevices3;
       terminalDevices.Add (link.Get (0));
       switchDevices1.Add (link.Get (1));
     
-      link = csma.Install (NodeContainer (terminals.Get (1), csmaSwitch.Get(2)));
+      link = csma.Install (NodeContainer (terminals.Get (1), csmaSwitch.Get(1)));
+      terminalDevices.Add (link.Get (0));
+      switchDevices2.Add (link.Get (1));
+
+      link = csma.Install (NodeContainer (terminals.Get (2), csmaSwitch.Get(2)));
       terminalDevices.Add (link.Get (0));
       switchDevices3.Add (link.Get (1));
     
@@ -267,7 +271,7 @@ NS_LOG_INFO ("Create Applications.");
                      Address (InetSocketAddress (Ipv4Address ("10.1.1.1"), port)));
   onoff.SetConstantRate (DataRate ("5kb/s"));
 
-  ApplicationContainer app1 = onoff.Install (terminals.Get (1));
+  ApplicationContainer app1 = onoff.Install (terminals.Get (2));
   // Start the application
   app1.Start (Seconds (0.0));
   app1.Stop (Seconds (10.0));
@@ -275,7 +279,7 @@ NS_LOG_INFO ("Create Applications.");
   // Create an optional packet sink to receive these packets
   PacketSinkHelper sink1 ("ns3::UdpSocketFactory",
                          Address (InetSocketAddress (Ipv4Address::GetAny (), port)));
-  app1 = sink1.Install (terminals.Get (1));
+  app1 = sink1.Install (terminals.Get (2));
   app1.Start (Seconds (0.0));
 
 
