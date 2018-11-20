@@ -73,7 +73,7 @@ To see it in detailed logging, run:
 ```
 
 ## Understanding openflow-switch.cc
-![alt text](https://github.com/joe019/SDN-Simulation/blob/master/docs/images/openflow-switch-topo.png "openflow-switch.cc topology")
+![alt text](images/openflow-switch-topo.png "openflow-switch.cc topology")
 ```
 #include <iostream>
 #include <fstream>
