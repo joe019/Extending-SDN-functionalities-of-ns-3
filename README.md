@@ -38,3 +38,9 @@ P4 is a declarative language for telling forwarding-plane devices (switches, NIC
 ### How does P4 relate to SDN and OpenFlow?
 P4 lets you tell the switch how to process packets and auto-generates an API connecting the control plane and the forwarding plane. So, a P4 program could configure a switch to look like an OpenFlow 1.0 switch, or an OpenFlow 1.4 switch, or something else entirely. And the control plane that populates the match-action rules at runtime could be centralized or distributed, running on a separate controller or directly on the switch. The main point of P4 is to free the network from low-level, proprietary interfaces to fixed-function chip-sets, to enable protocol-independent packet processing across a range of target platforms.
 [...Read more on p4](https://github.com/joe019/SDN-Simulation/wiki/3.-P4)
+
+## References      
+[Developer FAQs](https://www.nsnam.org/wiki/Developer_FAQ)<br>
+[User FAQs](https://www.nsnam.org/wiki/User_FAQ)<br>
+[OpenFlow Switch Device](https://www.nsnam.org/doxygen/group__openflow.html)<br>
+[OpenFlow switch support](https://www.nsnam.org/docs/release/3.29/models/html/openflow-switch.html)
