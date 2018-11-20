@@ -71,9 +71,3 @@ To see it in detailed logging, run:
 ```
 ./waf --run "openflow-switch -v"
 ```
-
-## References      
-[Developer FAQs](https://www.nsnam.org/wiki/Developer_FAQ)<br>
-[User FAQs](https://www.nsnam.org/wiki/User_FAQ)<br>
-[OpenFlow Switch Device](https://www.nsnam.org/doxygen/group__openflow.html)<br>
-[OpenFlow switch support](https://www.nsnam.org/docs/release/3.29/models/html/openflow-switch.html)
