@@ -1,5 +1,5 @@
 ---
-title: SDN Simulation
+title: Extending SDN functionality in ns-3
 ---
 
 # ns-3
@@ -148,7 +148,9 @@ Allow the user to override any of the defaults via command-line arguments:
     }
 ```
 Explicitly create the nodes required by the topology:
+
 NodeContainer -> Keeps track of a set of node pointers
+
 Create (n) -> Create n nodes and append pointers to them to the end of a NodeContainer
 ```
   NS_LOG_INFO ("Create nodes.");
@@ -198,6 +200,7 @@ Create the switch netdevice, which will do the packet switching:
     }
 ```
 Add internet stack to the terminals:
+
 InternetStackHelper -> Aggregate IP/TCP/UDP functionality to existing Nodes
 ```
   InternetStackHelper internet;
@@ -249,13 +252,16 @@ Create a similar flow from n3 to n0, starting at time 1.1 seconds:
   NS_LOG_INFO ("Configure Tracing.");
 ```
 Configure tracing of all enqueue, dequeue, and NetDevice receive events:
+
 Trace output will be sent to the file "openflow-switch.tr"
 ```
   AsciiTraceHelper ascii;
   csma.EnableAsciiAll (ascii.CreateFileStream ("openflow-switch.tr"));
 ```
 Configure some tcpdump traces. Each interface will be traced. The output files will be named:
+
    openflow-switch-nodeId-interfaceId.pcap 
+   
 and can be read by the "tcpdump -r" command (use "-tt" option to display timestamps correctly)
 ```
   csma.EnablePcapAll ("openflow-switch", false);
