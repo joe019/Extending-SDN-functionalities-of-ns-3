@@ -10,7 +10,7 @@ If mercurial is installed on your system, you can download ns-3 directly:
 hg clone http://code.nsnam.org/ns-3-dev
 ```
 
-To obtain additional related libraries such as support for Python bindings, clone the ‘ns-3-allinone’ repository as follows, and run the download.py program:
+To obtain additional related libraries such as support for Python bindings, clone the ns-3-allinone repository as follows, and run the download.py program:
 ```
 hg clone http://code.nsnam.org/ns-3-allinone
 cd ns-3-allinone && ./download.py
@@ -39,16 +39,15 @@ hg clone http://code.nsnam.org/openflow
 cd openflow
 ```
 
-From the “openflow” directory, run:
+From the openflow directory, run:
 ```
 ./waf configure
 ./waf build
 ```
 
-Your OFSID is now built into a libopenflow.a library! To link to an ns-3 build with this OpenFlow switch module, run from the ns-3-dev:
+Your OFSID is now built into a libopenflow.a library. To link to an ns-3 build with this OpenFlow switch module, run from ns-3-dev:
 ```
 ./waf configure --enable-examples --enable-tests --with-openflow=pathToOpenflow
-where pathToOpenflow=/home/gian/openflow or /home/joe019/7th\ sem/projects/openflow
 ```
 
 Under ---- Summary of optional NS-3 features: you should see:
