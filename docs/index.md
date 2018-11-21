@@ -2,7 +2,7 @@
 title: Extending SDN functionality in ns-3
 ---
 
-# ns-3
+# Get started with OpenFlow in ns-3
 ## Download ns-3
 
 If mercurial is installed on your system, you can download ns-3 directly:
@@ -16,7 +16,7 @@ hg clone http://code.nsnam.org/ns-3-allinone
 cd ns-3-allinone && ./download.py
 ```
 
-## Configuration
+## Configure ns-3
 Change the current directory to ns-3-allinone and run the following: 
 ```
 ./build.py 
@@ -29,7 +29,7 @@ To run a sample program:
 ./waf --run  first
 ```
  
-## Openflow
+## Enable OpenFlow
 
 In order to use the OpenFlowSwitch module, you must create and link the OFSID (OpenFlow Software Implementation Distribution) to ns-3. To do this:
 
