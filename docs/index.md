@@ -49,6 +49,7 @@ Your OFSID is now built into a libopenflow.a library. To link to an ns-3 build w
 ```
 ./waf configure --enable-examples --enable-tests --with-openflow=pathToOpenflow
 ```
+where <code>pathToOpenflow</code> is something like <code>/home/joe019/7th\ sem/projects/openflow</code>
 
 Under ---- Summary of optional NS-3 features: you should see:
 ```
