@@ -817,7 +817,7 @@ LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbu
       NS_LOG_ERROR ("Can't receive from this switch, not registered to the Controller.");
       return;
     }
- NS_LOG_INFO ("HateAgarwal switch id\n"<<swtch);
+ NS_LOG_INFO ("current Switch  id       "<<swtch);
   // We have received any packet at this point, so we pull the header to figure out what type of packet we're handling.
   uint8_t type = GetPacketType (buffer);
   if (type == OFPT_PACKET_IN) // The switch didn't understand the packet it received, so it forwarded it to the controller.
@@ -852,12 +852,12 @@ LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbu
                     {
                       out_port = st->second.port;
                       //in a switch if port which has broadcasted has got a reply then let the port broadcast again 
-                      LastbroadcastportMap_t ::iterator stx = m_lastbroadcastMapport.find(swtch);
-                       if(stx!= m_lastbroadcastMapport.end())
-                        {
-                           if(stx->second==out_port)
-                              stx->second=9999;//has to be changed from data type
-                        }
+                      // LastbroadcastportMap_t ::iterator stx = m_lastbroadcastMapport.find(swtch);
+                      //  if(stx!= m_lastbroadcastMapport.end())
+                      //   {
+                      //      if(stx->second==out_port)
+                      //         stx->second=9999;//has to be changed from data type
+                      //   }
                     }
                     else
                     {
@@ -879,6 +879,9 @@ LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbu
                   {
                     if(st1->second==in_port)
                     {
+                      //to drop
+                      ofp_flow_mod* ofm = BuildFlow (key, opi->buffer_id, OFPFC_ADD, 0, 0, OFP_FLOW_PERMANENT, OFP_FLOW_PERMANENT);
+                      SendToSwitch (swtch, ofm, ofm->header.length);
                       return;
                     }
                     st1->second=in_port;
@@ -930,9 +933,22 @@ LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbu
       x[0].port = out_port;
 
       // Create a new flow that outputs matched packets to a learned port, OFPP_FLOOD if there's no learned port.
-      ofp_flow_mod* ofm = BuildFlow (key, opi->buffer_id, OFPFC_ADD, x, sizeof(x), OFP_FLOW_PERMANENT, m_expirationTime.IsZero () ? OFP_FLOW_PERMANENT : m_expirationTime.GetSeconds ());
-      SendToSwitch (swtch, ofm, ofm->header.length);
-
+      
+      
+       if (!dst_addr.IsBroadcast ())
+        {
+          ofp_flow_mod* ofm = BuildFlow (key, opi->buffer_id, OFPFC_ADD, x, sizeof(x), OFP_FLOW_PERMANENT, m_expirationTime.IsZero () ? OFP_FLOW_PERMANENT : m_expirationTime.GetSeconds ());
+         SendToSwitch (swtch, ofm, ofm->header.length);
+        }
+        else
+        {
+          ofp_flow_mod* ofm = BuildFlow (key, opi->buffer_id, OFPFC_ADD, x, sizeof(x), 0, 0);
+          SendToSwitch (swtch, ofm, ofm->header.length);
+ ofm = BuildFlow (key, opi->buffer_id, OFPFC_MODIFY, 0,0, 0, 0);
+          SendToSwitch (swtch, ofm, ofm->header.length);
+       
+        }
+      
       // We can learn a specific port for the source address for future use.
       Mac48Address src_addr;
       src_addr.CopyFrom (key.flow.dl_src);
