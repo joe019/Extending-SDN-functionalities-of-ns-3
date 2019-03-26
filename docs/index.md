@@ -2,7 +2,7 @@
 title: Extending SDN functionality in ns-3
 ---
 
-<a href="https://github.com/joe019/Extending-SDN-functionality-in-ns-3/blob/master/docs/hello.html"> Click here</a>
+<a href="hello.html"> Click here</a>
 
 # Get started with OpenFlow in ns-3
 ## Download ns-3
