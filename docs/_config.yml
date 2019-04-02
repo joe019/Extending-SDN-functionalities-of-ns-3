@@ -1,2 +1,3 @@
 name: Major Project
 markdown: kramdown
+permalink: /:categories/:year/:month/:day/:title
