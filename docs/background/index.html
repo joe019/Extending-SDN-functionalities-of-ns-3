@@ -7,5 +7,6 @@ title: Background
 
 	  {% for post in site.categories.background %}
 	    <li><a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a></li>
+	    {{post.url}}
 	  {% endfor %}
 	</ul>
