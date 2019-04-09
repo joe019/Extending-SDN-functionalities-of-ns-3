@@ -806,6 +806,8 @@ TypeId LearningController::GetTypeId (void)
   ;
   return tid;
 }
+
+
 void
 LearningController::setaddress(Mac48Address switchid,Mac48Address newswitchid)
 {
@@ -1066,6 +1068,7 @@ LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbu
       {
          NS_LOG_INFO ("switch found in learner");
         LearnState_t::iterator st = (st1->second).find(src_addr);
+
         LearnState_t::iterator st2;
         NS_LOG_INFO ("size of map for this switch " << (st1->second).size());
 
@@ -1078,6 +1081,7 @@ LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbu
         { 
           LearnedState ls;
           ls.port = in_port;
+
          (st1->second).insert(std::make_pair (src_addr,ls));
           NS_LOG_INFO ("Learned that for switch "<<swtch <<"source address" << src_addr << " can be found over port " << in_port);
           // Learn src_addr goes to a certain port.

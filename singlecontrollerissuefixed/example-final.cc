@@ -133,13 +133,16 @@ main (int argc, char *argv[])
   // NetDeviceContainer linkSwitchC = csma.Install (NodeContainer (csmaSwitch.Get(2),csmaSwitch.Get(0)));//making straight topology
 
   //switchDevices1.Add (linkSwitchA.Get (0));
+
   switchDevices1=swtch1.addDeviceSwitch(switchDevices1,csmaSwitch.Get(1)->GetDevice(0),linkSwitchA.Get(0));
+
 
  // std::map<uint32_t,Mac48Address>::iterator st = switchdevicemap1.find(0);
 
   //switchDevices1.Add (linkSwitchC.Get (1));
 
  // switchDevices2.Add (linkSwitchA.Get (1));
+
   switchDevices2=swtch2.addDeviceSwitch(switchDevices2,csmaSwitch.Get(0)->GetDevice(0),linkSwitchA.Get(1));
  // switchDevices2.Add (linkSwitchB.Get (0));
   switchDevices2=swtch2.addDeviceSwitch(switchDevices2,csmaSwitch.Get(2)->GetDevice(0),linkSwitchB.Get(0));
@@ -147,20 +150,25 @@ main (int argc, char *argv[])
   //switchDevices3.Add (linkSwitchB.Get (1));
   switchDevices3=swtch3.addDeviceSwitch(switchDevices3,csmaSwitch.Get(1)->GetDevice(0),linkSwitchB.Get(1));
   NS_LOG_INFO ("tingtingting"<<Mac48Address::ConvertFrom(csmaSwitch.Get(2)->GetDevice(0)->GetAddress()));
+
   //switchDevices3.Add (linkSwitchC.Get (0));
 
   NetDeviceContainer link = csma.Install (NodeContainer (terminals.Get (0), csmaSwitch.Get(0)));
   terminalDevices.Add (link.Get (0));
   //switchDevices1.Add (link.Get (1));
+
   switchDevices1=swtch1.addDeviceNode(switchDevices1,terminals.Get (0)->GetDevice(0),link.Get(1));
 
  // NS_LOG_INFO ("device_added"<<Mac48Address::ConvertFrom(((link.Get(1))->GetDevice(0))->GetAddress()));
 
 
+
   link = csma.Install (NodeContainer (terminals.Get (1), csmaSwitch.Get(2)));
   terminalDevices.Add (link.Get (0));
  // switchDevices3.Add (link.Get (1));
+
   switchDevices3=swtch3.addDeviceNode(switchDevices3,terminals.Get (1)->GetDevice(0),link.Get(1));
+
 
   NS_LOG_INFO ("switch_confusion"<<Mac48Address::ConvertFrom(((csmaSwitch.Get(2))->GetDevice(0))->GetAddress()));
   // Create the switch netdevice, which will do the packet switching
@@ -221,6 +229,7 @@ main (int argc, char *argv[])
   //Ping application to be converted to configure function
 
 
+
   /*Mac48Address src_addr=Mac48Address::ConvertFrom(((terminals.Get(0))->GetDevice(0))->GetAddress());
   NS_LOG_INFO ("mac_address"<<src_addr);
   NS_LOG_INFO ("Create pinger");
@@ -235,7 +244,10 @@ main (int argc, char *argv[])
 	  	  app.Stop (Seconds (2.0));
 	  }
 
+
+=======
   }*/
+
   //creation of UDP traffic
 
 
@@ -272,6 +284,7 @@ main (int argc, char *argv[])
 
   //creation of TCP traffic
 
+
     NS_LOG_INFO ("Create Applications.");
 
 
@@ -286,7 +299,9 @@ main (int argc, char *argv[])
   source.SetAttribute ("MaxBytes", UintegerValue (1));
   ApplicationContainer sourceApps = source.Install (terminals.Get (0));
   sourceApps.Start (Seconds (1.0));
+
   sourceApps.Stop (Seconds (10.0));
+
 
 //
 // Create a PacketSinkApplication and install it on node 1

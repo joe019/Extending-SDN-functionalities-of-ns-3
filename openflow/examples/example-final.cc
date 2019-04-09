@@ -266,21 +266,33 @@ NS_LOG_INFO ("Create Applications.");
   sinkApps.Stop (Seconds (10.0));
 */
 //UDP Socket
+  uint16_t port1 = 443;   // Discard port (RFC 863)
+  uint16_t port2 = 21;   // Discard port (RFC 863)
 
-  OnOffHelper onoff ("ns3::UdpSocketFactory",
-                     Address (InetSocketAddress (Ipv4Address ("10.1.1.1"), port)));
+
+  OnOffHelper onoff ("ns3::TcpSocketFactory",
+                     Address (InetSocketAddress (Ipv4Address ("10.1.1.3"), port1)));
   onoff.SetConstantRate (DataRate ("5kb/s"));
 
-  ApplicationContainer app1 = onoff.Install (terminals.Get (2));
+  ApplicationContainer app1 = onoff.Install (terminals.Get (0));
   // Start the application
-  app1.Start (Seconds (0.0));
-  app1.Stop (Seconds (10.0));
+  app1.Start (Seconds (1.0));
+  app1.Stop (Seconds (5.0));
+  
+  OnOffHelper onoff ("ns3::TcpSocketFactory",
+                     Address (InetSocketAddress (Ipv4Address ("10.1.1.3"), port2)));
+  onoff.SetConstantRate (DataRate ("5kb/s"));
+
+  ApplicationContainer app2 = onoff.Install (terminals.Get (0));
+  // Start the application
+  app2.Start (Seconds (0.0));
+  app2.Stop (Seconds (10.0));
 
   // Create an optional packet sink to receive these packets
-  PacketSinkHelper sink1 ("ns3::UdpSocketFactory",
-                         Address (InetSocketAddress (Ipv4Address::GetAny (), port)));
-  app1 = sink1.Install (terminals.Get (2));
-  app1.Start (Seconds (0.0));
+//   PacketSinkHelper sink1 ("ns3::UdpSocketFactory",
+//                          Address (InetSocketAddress (Ipv4Address::GetAny (), port)));
+//   app1 = sink1.Install (terminals.Get (2));
+//   app1.Start (Seconds (0.0));
 
 
 
@@ -292,23 +304,23 @@ NS_LOG_INFO ("Create Applications.");
 
 
 
-//    NS_LOG_INFO ("Configure Tracing.");
+// //    NS_LOG_INFO ("Configure Tracing.");
 
-  //
-  // Configure tracing of all enqueue, dequeue, and NetDevice receive events.
-  // Trace output will be sent to the file "openflow-switch.tr"
-  //
-  AsciiTraceHelper ascii;
-   csma.EnableAsciiAll (ascii.CreateFileStream ("example1.tr"));
+//   //
+//   // Configure tracing of all enqueue, dequeue, and NetDevice receive events.
+//   // Trace output will be sent to the file "openflow-switch.tr"
+//   //
+//   AsciiTraceHelper ascii;
+//    csma.EnableAsciiAll (ascii.CreateFileStream ("example1.tr"));
 
-  //
-  // Also configure some tcpdump traces; each interface will be traced.
-  // The output files will be named:
-  //     openflow-switch-<nodeId>-<interfaceId>.pcap
-  // and can be read by the "tcpdump -r" command (use "-tt" option to
-  // display timestamps correctly)
-  //
-   csma.EnablePcapAll ("example1", true);
+//   //
+//   // Also configure some tcpdump traces; each interface will be traced.
+//   // The output files will be named:
+//   //     openflow-switch-<nodeId>-<interfaceId>.pcap
+//   // and can be read by the "tcpdump -r" command (use "-tt" option to
+//   // display timestamps correctly)
+//   //
+//    csma.EnablePcapAll ("example1", true);
 
   //
   // Now, do the actual simulation.

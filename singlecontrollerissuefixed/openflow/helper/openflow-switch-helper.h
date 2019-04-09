@@ -95,9 +95,11 @@ public:
   NetDeviceContainer
   Install (std::string nodeName, NetDeviceContainer c);
   NetDeviceContainer
+
  addDeviceSwitch(NetDeviceContainer switchNetDevice,Ptr< NetDevice > otherEnd,Ptr< NetDevice > myEnd);
   NetDeviceContainer
   addDeviceNode(NetDeviceContainer switchNetDevice,Ptr< NetDevice > otherEnd,Ptr< NetDevice > myEnd);
+
 private:
   ObjectFactory m_deviceFactory; //!< Object factory
   t_portmap switchlist,nodelist;
