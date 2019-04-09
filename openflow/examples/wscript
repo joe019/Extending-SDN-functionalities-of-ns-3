@@ -5,18 +5,18 @@ def build(bld):
                                 ['openflow', 'csma', 'internet', 'applications'])
    obj.source = 'openflow-switch.cc'
 
-   obj = bld.create_ns3_program('example1',
+   obj = bld.create_ns3_program('twoswitch-topology',
                                 ['openflow', 'csma', 'internet', 'applications'])
-   obj.source = 'example1.cc'
-
-   obj = bld.create_ns3_program('simpleloop-topology',
-                                ['openflow', 'csma', 'internet', 'applications'])
-   obj.source = 'simpleloop-topology.cc'
+   obj.source = 'twoswitch-topology.cc'
 
    obj = bld.create_ns3_program('single-controller-issue',
                                 ['openflow', 'csma', 'internet', 'applications'])
    obj.source = 'single-controller-issue.cc'
 
-   obj = bld.create_ns3_program('pentagon',
+   obj = bld.create_ns3_program('simpleloop-topology',
                                 ['openflow', 'csma', 'internet', 'applications'])
-   obj.source = 'pentagon.cc'
+   obj.source = 'simpleloop-topology.cc'
+
+   obj = bld.create_ns3_program('sevenRing-topology',
+                                ['openflow', 'csma', 'internet', 'applications'])
+   obj.source = 'sevenRing-topology.cc'
