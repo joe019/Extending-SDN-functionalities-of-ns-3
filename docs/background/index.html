@@ -43,83 +43,81 @@ title: Background
 	Get started with OpenFlow in ns-3
 </button>
 <div class="content">
-	<p>
-		<b>1. Download ns-3</b><br>
-		If mercurial is installed on your system, you can download ns-3 directly:<br>
-		<code>
-		hg clone http://code.nsnam.org/ns-3-dev
-		</code>
-		<br>
-		To obtain additional related libraries such as support for Python bindings, clone the ns-3-allinone repository as follows, and run the download.py program:<br>
-		<code>
-		hg clone http://code.nsnam.org/ns-3-allinone
-		cd ns-3-allinone && ./download.py
-		</code>
-		<br>
+	<b>1. Download ns-3</b><br>
+	If mercurial is installed on your system, you can download ns-3 directly:<br>
+	<code>
+	hg clone http://code.nsnam.org/ns-3-dev
+	</code>
+	<br>
+	To obtain additional related libraries such as support for Python bindings, clone the ns-3-allinone repository as follows, and run the download.py program:<br>
+	<code>
+	hg clone http://code.nsnam.org/ns-3-allinone
+	cd ns-3-allinone && ./download.py
+	</code>
+	<br>
 
-		<br><b>2. Configure ns-3</b><br>
-		Change the current directory to ns-3-allinone and run the following: <br>
-		<code>
-		./build.py <br>
-		cd ns-3-dev <br>
-		./waf configure --enable-examples --enable-tests
-		</code>
-		<br>
-		To run a sample program: <br>
-		<code>
-		./waf --run  first
-		</code>
-		<br>
+	<br><b>2. Configure ns-3</b><br>
+	Change the current directory to ns-3-allinone and run the following: <br>
+	<code>
+	./build.py <br>
+	cd ns-3-dev <br>
+	./waf configure --enable-examples --enable-tests
+	</code>
+	<br>
+	To run a sample program: <br>
+	<code>
+	./waf --run  first
+	</code>
+	<br>
 
-		<br><b>3. Enable OpenFlow</b><br>
-		In order to use the OpenFlowSwitch module, you must create and link the OFSID (OpenFlow Software Implementation Distribution) to ns-3. To do this:<br>
+	<br><b>3. Enable OpenFlow</b><br>
+	In order to use the OpenFlowSwitch module, you must create and link the OFSID (OpenFlow Software Implementation Distribution) to ns-3. To do this:<br>
 
-		Obtain the OFSID code. An ns-3 specific OFSID branch is provided to ensure operation with ns-3. Use mercurial to download this branch and waf to build the library:<br>
-		<code>
-		hg clone http://code.nsnam.org/openflow <br>
-		cd openflow
-		</code>
-		<br>
-		
-		From the openflow directory, run:<br>
-		<code>
-		./waf configure <br>
-		./waf build
-		</code>
-		<br>
-		
-		Your OFSID is now built into a libopenflow.a library. To link to an ns-3 build with this OpenFlow switch module, run from ns-3-dev:<br>
-		<code>
-		./waf configure --enable-examples --enable-tests --with-openflow=pathToOpenflow
-		</code> <br>
-		where <code>pathToOpenflow</code> is something like <code>/home/joe019/7th\ sem/projects/openflow</code>
-		<br>
-		
-		Under ---- Summary of optional NS-3 features: you should see:<br>
-		<code>
-		"NS-3 OpenFlow Integration     : enabled"
-		</code>
-		<br>
-		
-		indicating the library has been linked to ns-3. Run:<br>
-		<code>
-		./waf build
-		</code>
-		<br>
-		
-		to build ns-3 and activate the OpenFlowSwitch module in ns-3.
+	Obtain the OFSID code. An ns-3 specific OFSID branch is provided to ensure operation with ns-3. Use mercurial to download this branch and waf to build the library:<br>
+	<code>
+	hg clone http://code.nsnam.org/openflow <br>
+	cd openflow
+	</code>
+	<br>
+	
+	From the openflow directory, run:<br>
+	<code>
+	./waf configure <br>
+	./waf build
+	</code>
+	<br>
+	
+	Your OFSID is now built into a libopenflow.a library. To link to an ns-3 build with this OpenFlow switch module, run from ns-3-dev:<br>
+	<code>
+	./waf configure --enable-examples --enable-tests --with-openflow=pathToOpenflow
+	</code> <br>
+	where <code>pathToOpenflow</code> is something like <code>/home/joe019/7th\ sem/projects/openflow</code>
+	<br>
+	
+	Under ---- Summary of optional NS-3 features: you should see:<br>
+	<code>
+	"NS-3 OpenFlow Integration     : enabled"
+	</code>
+	<br>
+	
+	indicating the library has been linked to ns-3. Run:<br>
+	<code>
+	./waf build
+	</code>
+	<br>
+	
+	to build ns-3 and activate the OpenFlowSwitch module in ns-3.
 
-		For an example demonstrating its use in a simple learning controller/switch, run:<br>
-		<code>
-		./waf --run openflow-switch
-		</code>
-		<br>
-		
-		To see it in detailed logging, run:<br>
-		<code>
-		./waf --run "openflow-switch -v"
-		</code>
-	</p>
+	For an example demonstrating its use in a simple learning controller/switch, run:<br>
+	<code>
+	./waf --run openflow-switch
+	</code>
+	<br>
+	
+	To see it in detailed logging, run:<br>
+	<code>
+	./waf --run "openflow-switch -v"
+	</code>
 </div>
 
 <button class="collapsible">
