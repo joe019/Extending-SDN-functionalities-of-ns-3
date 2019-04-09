@@ -471,10 +471,15 @@ public:
   void ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbuf* buffer);
   void create_path(Mac48Address,std::map<uint32_t,Mac48Address>,std::map<uint32_t,Mac48Address>);
 
+  void setaddress(Mac48Address switchid,Mac48Address oldswitchid);
+
 protected:
   struct LearnedState
   {
     uint32_t port;                      ///< Learned port.
+
+    int32_t dist=-1;
+
   };
   Time m_expirationTime;                ///< Time it takes for learned MAC state entry/created flow to expire.
   typedef std::map<Mac48Address, LearnedState> LearnState_t;

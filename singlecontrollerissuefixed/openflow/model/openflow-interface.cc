@@ -807,10 +807,91 @@ TypeId LearningController::GetTypeId (void)
   return tid;
 }
 
+
 void
-LearningController::create_path(Mac48Address,std::map<uint32_t,Mac48Address>,std::map<uint32_t,Mac48Address>)
+LearningController::setaddress(Mac48Address switchid,Mac48Address newswitchid)
 {
-	NS_LOG_INFO ("*********************Shruti agarwal is a bitch");
+	// NS_LOG_INFO ("reconfiguring "<<switchid<<" using "<<newswitchid<<"\n\n");
+	LearnStateSwitchMap_t::iterator st1 = m_LearnStateSwitchMap.find(switchid);
+	LearnStateSwitchMap_t::iterator st2 = m_LearnStateSwitchMap.find(newswitchid);
+	int32_t flag=0;
+	if(st1==m_LearnStateSwitchMap.end()||st2==m_LearnStateSwitchMap.end())
+	{
+		return;
+	}
+	else
+	{
+		LearnState_t::iterator st = (st1->second).find(newswitchid);
+		uint32_t port_no=(st->second).port;
+
+		for(LearnState_t::iterator it = (st2->second).begin(); it != (st2->second).end(); it++ )
+			{
+				if((it->second).dist!=-1)
+				{
+					int32_t dist_before=(it->second).dist;
+					LearnState_t::iterator st4=(st1->second).find(it->first);
+					if(st4==(st1->second).end())
+					{
+						LearnedState ls;
+						ls.port = port_no;
+						ls.dist=dist_before+1;
+						(st1->second).insert(std::make_pair(it->first,ls));
+						flag=1;
+					}
+					else
+					{
+						if((st4->second).dist>(dist_before+1))
+						{
+							(st4->second).port=port_no;
+							(st4->second).dist=dist_before+1;
+							flag=1;
+						}
+					}
+				}
+			}
+		if(flag==1)
+		{
+			for(LearnState_t::iterator it=(st1->second).begin();it!=(st1->second).end();++it)
+			{
+				//NS_LOG_INFO (it->first<<" =="<<newswitchid);
+				if((it->second).dist==-1&&(it->first)!=newswitchid)
+				{
+				//	NS_LOG_INFO ("entereds");
+					setaddress(it->first,switchid);
+				}
+			}
+		}
+	}
+}
+void
+LearningController::create_path(Mac48Address switchid,std::map<uint32_t,Mac48Address>switchlist,std::map<uint32_t,Mac48Address>nodelist)
+{
+	std::map<uint32_t,Mac48Address>::iterator it;
+	LearnState_t templs;
+	for(it = nodelist.begin(); it != nodelist.end(); it++ )
+	{
+				LearnedState ls;
+		        ls.port = it->first;
+		        ls.dist=1;
+
+		        templs.insert(std::make_pair (it->second,ls));
+
+		    //    NS_LOG_INFO ("*********************Shruti agarwal is a bitch");
+	}
+	for(it = switchlist.begin(); it != switchlist.end(); it++ )
+	{
+		LearnedState ls;
+		ls.port = it->first;
+		ls.dist=-1;
+		templs.insert(std::make_pair (it->second,ls));
+
+	}
+	m_LearnStateSwitchMap.insert(std::make_pair (switchid,templs));
+	for(it = switchlist.begin(); it != switchlist.end(); it++ )
+		{
+		setaddress(it->second,switchid);
+		setaddress(switchid,it->second);
+		}
 }
 void
 LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbuf* buffer)
@@ -877,6 +958,7 @@ LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbu
           }
         else
                 {
+
                   NS_LOG_INFO ("Setting to flood; this packet is a broadcast");
                    Mac48Address src_addr;
                    src_addr.CopyFrom (key.flow.dl_src);
@@ -986,12 +1068,20 @@ LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbu
       {
          NS_LOG_INFO ("switch found in learner");
         LearnState_t::iterator st = (st1->second).find(src_addr);
+
+        LearnState_t::iterator st2;
+        NS_LOG_INFO ("size of map for this switch " << (st1->second).size());
+
+        NS_LOG_INFO ("searching for mac in switch");
+        for(st2 = (st1->second).begin(); st2 != (st1->second).end(); st2++ )
+                		{
+                		NS_LOG_INFO ("content of map "<<st2->first<<"\n\n\n");
+                		}
         if(st==(st1->second).end())
         { 
-           NS_LOG_INFO ("searching for mac in switch");
           LearnedState ls;
           ls.port = in_port;
-           NS_LOG_INFO ("size of map for this switch " << in_port);
+
          (st1->second).insert(std::make_pair (src_addr,ls));
           NS_LOG_INFO ("Learned that for switch "<<swtch <<"source address" << src_addr << " can be found over port " << in_port);
           // Learn src_addr goes to a certain port.

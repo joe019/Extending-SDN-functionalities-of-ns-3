@@ -99,19 +99,21 @@ OpenFlowSwitchHelper::Install (std::string nodeName, NetDeviceContainer c)
 }
 //function to add node to switch
 NetDeviceContainer
-OpenFlowSwitchHelper::addDeviceSwitch(NetDeviceContainer switchNetDevice,Ptr< NetDevice > device)
+
+OpenFlowSwitchHelper::addDeviceSwitch(NetDeviceContainer switchNetDevice,Ptr< NetDevice > otherEnd,Ptr< NetDevice > myEnd)
 {
 	uint32_t size=switchNetDevice.GetN();
-	switchlist.insert(std::make_pair (size,Mac48Address::ConvertFrom(device->GetAddress())));
-	switchNetDevice.Add(device);
+	switchlist.insert(std::make_pair (size,Mac48Address::ConvertFrom(otherEnd->GetAddress())));
+	switchNetDevice.Add(myEnd);
 	return switchNetDevice;
 }
 NetDeviceContainer
-OpenFlowSwitchHelper::addDeviceNode(NetDeviceContainer switchNetDevice,Ptr< NetDevice > device)
+OpenFlowSwitchHelper::addDeviceNode(NetDeviceContainer switchNetDevice,Ptr< NetDevice > otherEnd,Ptr< NetDevice > myEnd)
 {
 	uint32_t size=switchNetDevice.GetN();
-	nodelist.insert(std::make_pair (size,Mac48Address::ConvertFrom(device->GetAddress())));
-	switchNetDevice.Add(device);
+	nodelist.insert(std::make_pair (size,Mac48Address::ConvertFrom(otherEnd->GetAddress())));
+	switchNetDevice.Add(myEnd);
+
 	return switchNetDevice;
 }
 
