@@ -30,6 +30,8 @@ namespace ns3 {
 
 NS_LOG_COMPONENT_DEFINE ("OpenFlowSwitchHelper");
 
+
+typedef std::map<uint32_t,Mac48Address>t_portmap;
 OpenFlowSwitchHelper::OpenFlowSwitchHelper ()
 {
   NS_LOG_FUNCTION_NOARGS ();
@@ -46,6 +48,8 @@ OpenFlowSwitchHelper::SetDeviceAttribute (std::string n1, const AttributeValue &
 NetDeviceContainer
 OpenFlowSwitchHelper::Install (Ptr<Node> node, NetDeviceContainer c, Ptr<ns3::ofi::Controller> controller)
 {
+	controller->create_path(Mac48Address::ConvertFrom((node->GetDevice(0)->GetAddress())),switchlist,nodelist,high_traffic_flag);
+	 NS_LOG_INFO ("******************************************************reaching");
   NS_LOG_FUNCTION_NOARGS ();
   NS_LOG_INFO ("**** Install switch device on node " << node->GetId ());
 
@@ -68,6 +72,7 @@ OpenFlowSwitchHelper::Install (Ptr<Node> node, NetDeviceContainer c, Ptr<ns3::of
 NetDeviceContainer
 OpenFlowSwitchHelper::Install (Ptr<Node> node, NetDeviceContainer c)
 {
+	 NS_LOG_INFO ("******************************************************reaching");
   NS_LOG_FUNCTION_NOARGS ();
   NS_LOG_INFO ("**** Install switch device on node " << node->GetId ());
 
@@ -87,9 +92,39 @@ OpenFlowSwitchHelper::Install (Ptr<Node> node, NetDeviceContainer c)
 NetDeviceContainer
 OpenFlowSwitchHelper::Install (std::string nodeName, NetDeviceContainer c)
 {
+	 NS_LOG_INFO ("******************************************************reaching");
   NS_LOG_FUNCTION_NOARGS ();
   Ptr<Node> node = Names::Find<Node> (nodeName);
   return Install (node, c);
+}
+//function to add node to switch
+NetDeviceContainer
+OpenFlowSwitchHelper::addDeviceSwitch(NetDeviceContainer switchNetDevice,Ptr< NetDevice > otherEnd,Ptr< NetDevice > myEnd)
+{
+	uint32_t size=switchNetDevice.GetN();
+	switchlist.insert(std::make_pair (size,Mac48Address::ConvertFrom(otherEnd->GetAddress())));
+	switchNetDevice.Add(myEnd);
+	return switchNetDevice;
+}
+NetDeviceContainer
+OpenFlowSwitchHelper::addDeviceNode(NetDeviceContainer switchNetDevice,Ptr< NetDevice > otherEnd,Ptr< NetDevice > myEnd)
+{
+	uint32_t size=switchNetDevice.GetN();
+	nodelist.insert(std::make_pair (size,Mac48Address::ConvertFrom(otherEnd->GetAddress())));
+	switchNetDevice.Add(myEnd);
+	return switchNetDevice;
+}
+void
+OpenFlowSwitchHelper:: toggleTrafficFlag()
+{
+	if(high_traffic_flag==1)
+	{
+		high_traffic_flag=0;
+	}
+	else
+	{
+		high_traffic_flag=1;
+	}
 }
 
 } // namespace ns3

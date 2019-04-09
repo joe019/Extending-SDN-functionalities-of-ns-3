@@ -158,12 +158,12 @@ main (int argc, char *argv[])
 
   OnOffHelper onoff ("ns3::UdpSocketFactory",
                      Address (InetSocketAddress (Ipv4Address ("10.1.1.2"), port)));
-  onoff.SetConstantRate (DataRate ("5kb/s"));
+  onoff.SetConstantRate (DataRate ("500kb/s"));
 
   ApplicationContainer app = onoff.Install (terminals.Get (0));
   // Start the application
   app.Start (Seconds (1.0));
-  app.Stop (Seconds (2.0));
+  app.Stop (Seconds (10.0));
 
   // Create an optional packet sink to receive these packets
   PacketSinkHelper sink ("ns3::UdpSocketFactory",
@@ -178,7 +178,7 @@ main (int argc, char *argv[])
                       AddressValue (InetSocketAddress (Ipv4Address ("10.1.1.1"), port)));
   app = onoff.Install (terminals.Get (3));
   app.Start (Seconds (1.1));
-  app.Stop (Seconds (1.2));
+  app.Stop (Seconds (10.0));
 
   app = sink.Install (terminals.Get (0));
   app.Start (Seconds (0.0));

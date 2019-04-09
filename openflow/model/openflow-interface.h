@@ -389,6 +389,13 @@ public:
    */
   void StartDump (StatsDumpCallback* cb);
 
+  /**
+  *
+  */
+  virtual void create_path(Mac48Address,std::map<uint32_t,Mac48Address>,std::map<uint32_t,Mac48Address>,uint32_t)
+  {}
+
+
 protected:
   /**
    * However the controller is implemented, this method is to
@@ -463,7 +470,8 @@ public:
 
   virtual ~LearningController ()
   {
-    m_learnState.clear ();
+    m_LearnStateSwitchMap.clear();
+    m_LearnStateSwitchMapSlow.clear();
   }
 
   void ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbuf* buffer);
@@ -472,12 +480,34 @@ protected:
   struct LearnedState
   {
     uint32_t port;                      ///< Learned port.
+    int32_t dist=-1;                    ///< Distance measure 
   };
   Time m_expirationTime;                ///< Time it takes for learned MAC state entry/created flow to expire.
   typedef std::map<Mac48Address, LearnedState> LearnState_t;
-  typedef std::map<Mac48Address,uint32_t> broadcast_flags;
-  LearnState_t m_learnState,m_learnState_UDP ;            ///< Learned state data.
-  broadcast_flags broadcast_done;
+  typedef std::map<Mac48Address, LearnState_t> LearnStateSwitchMap_t;//Learn State Data
+  typedef std::map<Mac48Address, uint32_t > LastbroadcastportMap_t;//broadcast Source Data
+  typedef std::map<Mac48Address, std::set<uint32_t> > PortList_t;  //List of Active Ports in switch
+  typedef std::set<Mac48Address> SlowSwitchList_t;//List of High Traffic Switchs
+
+  LearnStateSwitchMap_t m_LearnStateSwitchMap,m_LearnStateSwitchMapSlow;
+  PortList_t m_allPortList,m_slowPortList;
+  SlowSwitchList_t m_slowSwitchList;
+  LastbroadcastportMap_t m_lastbroadcastMapport;
+  
+  /**
+  *This 
+  */
+  void create_path_helper(Mac48Address switchid,std::map<uint32_t,Mac48Address>switchlist,std::map<uint32_t,Mac48Address>nodelist,LearnStateSwitchMap_t *switchmap);
+  
+  /**
+  *
+  */
+  void create_path(Mac48Address,std::map<uint32_t,Mac48Address>,std::map<uint32_t,Mac48Address>,uint32_t);
+  
+  /**
+  *This
+  */
+  void setaddress(Mac48Address switchid,Mac48Address oldswitchid,LearnStateSwitchMap_t *);
 
 };
 
@@ -552,6 +582,9 @@ uint16_t ValidateVendor (const sw_flow_key *key, const ofp_action_header *ah, ui
  * different packets that have occupied a single buffer.  Thus, the more
  * buffers we have, the lower-quality the cookie...
  */
+
+
+
 #define PKT_BUFFER_BITS 8
 #define N_PKT_BUFFERS (1 << PKT_BUFFER_BITS)
 #define PKT_BUFFER_MASK (N_PKT_BUFFERS - 1)

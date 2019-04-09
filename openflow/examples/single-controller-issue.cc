@@ -158,14 +158,10 @@ main (int argc, char *argv[])
   
   //Linking switch1 with controller
   switch2.Install (switchNode2, switchDevices2, controller);
-
-
-
-   
+ 
   InternetStackHelper internet;
   internet.Install (terminals);
-  
-
+    
   NS_LOG_INFO ("Assign IP Addresses.");
   Ipv4AddressHelper ipv4;
   ipv4.SetBase ("10.1.1.0", "255.255.255.0");
@@ -175,7 +171,7 @@ main (int argc, char *argv[])
   NS_LOG_INFO ("Create Applications.");
   uint16_t port = 9;   // Discard port (RFC 863)
 
-  OnOffHelper onoff ("ns3::UdpSocketFactory",
+  OnOffHelper onoff ("ns3::TcpSocketFactory",
                      Address (InetSocketAddress (Ipv4Address ("10.1.1.4"), port)));
   onoff.SetConstantRate (DataRate ("1kb/s"));
 
@@ -184,41 +180,29 @@ main (int argc, char *argv[])
   app.Start (Seconds (1.0));
   app.Stop (Seconds (10.0));
 
-  // Create an optional packet sink to receive these packets
-  PacketSinkHelper sink ("ns3::UdpSocketFactory",
-                         Address (InetSocketAddress (Ipv4Address::GetAny (), port)));
-  app = sink.Install (terminals.Get (1));
-  app.Start (Seconds (0.0));
+  // // Create an optional packet sink to receive these packets
+  // PacketSinkHelper sink ("ns3::UdpSocketFactory",
+  //                        Address (InetSocketAddress (Ipv4Address::GetAny (), port)));
+  // app = sink.Install (terminals.Get (1));
+  // app.Start (Seconds (0.0));
 
-  //
-  // Create a similar flow from n3 to n0, starting at time 1.1 seconds
-  //
-  onoff.SetAttribute ("Remote",
-                      AddressValue (InetSocketAddress (Ipv4Address ("10.1.1.1"), port)));
-  app = onoff.Install (terminals.Get (3));
-  app.Start (Seconds (1.1));
-  app.Stop (Seconds (10.0));
+  // NS_LOG_INFO ("Configure Tracing.");
 
-  app = sink.Install (terminals.Get (0));
-  app.Start (Seconds (0.0));
+  // //
+  // // Configure tracing of all enqueue, dequeue, and NetDevice receive events.
+  // // Trace output will be sent to the file "openflow-switch.tr"
+  // //
+  // AsciiTraceHelper ascii;
+  // csma.EnableAsciiAll (ascii.CreateFileStream ("openflow-switch.tr"));
 
-  NS_LOG_INFO ("Configure Tracing.");
-
-  //
-  // Configure tracing of all enqueue, dequeue, and NetDevice receive events.
-  // Trace output will be sent to the file "openflow-switch.tr"
-  //
-  AsciiTraceHelper ascii;
-  csma.EnableAsciiAll (ascii.CreateFileStream ("openflow-switch.tr"));
-
-  //
-  // Also configure some tcpdump traces; each interface will be traced.
-  // The output files will be named:
-  //     openflow-switch-<nodeId>-<interfaceId>.pcap
-  // and can be read by the "tcpdump -r" command (use "-tt" option to
-  // display timestamps correctly)
-  //
-  csma.EnablePcapAll ("openflow-switch", false);
+  // //
+  // // Also configure some tcpdump traces; each interface will be traced.
+  // // The output files will be named:
+  // //     openflow-switch-<nodeId>-<interfaceId>.pcap
+  // // and can be read by the "tcpdump -r" command (use "-tt" option to
+  // // display timestamps correctly)
+  // //
+  // csma.EnablePcapAll ("openflow-switch", false);
 
   //
   // Now, do the actual simulation.
@@ -231,128 +215,3 @@ main (int argc, char *argv[])
   NS_LOG_INFO ("NS-3 OpenFlow is not enabled. Cannot run simulation.");
   #endif // NS3_OPENFLOW
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*// PointToPointHelper pointToPoint;
-  // pointToPoint.SetDeviceAttribute ("DataRate", StringValue ("5Mbps"));
-  // pointToPoint.SetChannelAttribute ("Delay", StringValue ("2ms"));
-
-  // NetDeviceContainer p2pDevices;
-  // p2pDevices = pointToPoint.Install (csmaSwitch);
-
-
-  // Add internet stack to the terminals
-  InternetStackHelper internet;
-  internet.Install (terminals);
-  
-  // We've got the "hardware" in place.  Now we need to add IP addresses.
-  NS_LOG_INFO ("Assign IP Addresses.");
-  Ipv4AddressHelper ipv4;
-  ipv4.SetBase ("10.1.1.0", "255.255.255.0");
-  ipv4.Assign (terminalDevices);
-  // ipv4.Assign(terminalDevices2);
-   
-  // Ipv4AddressHelper ipv42; 
-  // ipv42.SetBase ("10.1.2.0", "255.255.255.0");
-  // ipv42.Assign (terminalDevices2);
-  
-  // // Create an OnOff application to send UDP datagrams from n0 to n1.
-  // NS_LOG_INFO ("Create Applications.");
-  uint16_t port = 9;   // Discard port (RFC 863)
-
-  OnOffHelper onoff ("ns3::UdpSocketFactory",
-                     Address (InetSocketAddress (Ipv4Address ("10.1.1.0"), port)));
-  onoff.SetConstantRate (DataRate ("5kb/s"));
-
-  ApplicationContainer app = onoff.Install (terminals.Get (2));
- 	  // Start the application
-  app.Start (Seconds (1.0));
-  app.Stop (Seconds (10.0));
-
-  // Create an optional packet sink to receive these packets
-  PacketSinkHelper sink ("ns3::UdpSocketFactory",
-                         Address (InetSocketAddress (Ipv4Address::GetAny (), port)));
-  app = sink.Install (terminals.Get (1));
-  app.Start (Seconds (0.0));
-
-  app = sink.Install (terminals.Get (0));
-  app.Start (Seconds (0.0));
-
-   
-// NS_LOG_INFO ("Create Applications.");
-
-
-// //Create a BulkSendApplication and install it on node 0
-
-//   uint16_t port = 9;  // well-known echo port number
-
-//   //terminals.Get(0).Ipv4Address()
-//   BulkSendHelper source ("ns3::TcpSocketFactory",
-//                          InetSocketAddress (Ipv4Address("10.1.1.1"), port));
-//   // Set the amount of data to send in bytes.  Zero is unlimited.
-//   source.SetAttribute ("MaxBytes", UintegerValue (10));
-//   ApplicationContainer sourceApps = source.Install (terminals.Get (2));
-//   sourceApps.Start (Seconds (0.0));
-//   sourceApps.Stop (Seconds (10.0));
-
-//
-// Create a PacketSinkApplication and install it on node 1
-//
-  // PacketSinkHelper sink ("ns3::TcpSocketFactory",
-  //                        InetSocketAddress (Ipv4Address::GetAny (), port));
-  // ApplicationContainer sinkApps = sink.Install (terminals.Get (2));
-  // sinkApps.Start (Seconds (0.0));
-  // sinkApps.Stop (Seconds (10.0));
-
-
-//    NS_LOG_INFO ("Configure Tracing.");
-
-  //
-  // Configure tracing of all enqueue, dequeue, and NetDevice receive events.
-  // Trace output will be sent to the file "openflow-switch.tr"
-  //
-  AsciiTraceHelper ascii;
-   csma.EnableAsciiAll (ascii.CreateFileStream ("example1.tr"));
-
-  //
-  // Also configure some tcpdump traces; each interface will be traced.
-  // The output files will be named:
-  //     openflow-switch-<nodeId>-<interfaceId>.pcap
-  // and can be read by the "tcpdump -r" command (use "-tt" option to
-  // display timestamps correctly)
-  //
-   csma.EnablePcapAll ("example1", true);
-
-  //
-  // Now, do the actual simulation.
-  //
-  NS_LOG_INFO ("Run Simulation.");
-  Simulator::Run ();
-  Simulator::Destroy ();
-  NS_LOG_INFO ("Done.");
-  #else
-  NS_LOG_INFO ("NS-3 OpenFlow is not enabled. Cannot run simulation.");
-  #endif // NS3_OPENFLOW
-}
-*/

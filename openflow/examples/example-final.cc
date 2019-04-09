@@ -43,7 +43,7 @@
 #include "ns3/openflow-module.h"
 #include "ns3/point-to-point-module.h"
 #include "ns3/log.h"
-
+#include "ns3/v4ping-helper.h"
 using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE ("OpenFlowCsmaSwitchExample");
@@ -107,14 +107,14 @@ main (int argc, char *argv[])
   //
   NS_LOG_INFO ("Create nodes.");
   NodeContainer terminals;
-  terminals.Create (3);
+  terminals.Create (2);
 
   NodeContainer csmaSwitch;
   csmaSwitch.Create (3);
 
   NS_LOG_INFO ("Build Topology");
   CsmaHelper csma;
-  csma.SetChannelAttribute ("DataRate", DataRateValue (5000000));
+  csma.SetChannelAttribute ("DataRate", DataRateValue (5000));
   csma.SetChannelAttribute ("Delay", TimeValue (MilliSeconds (2)));
 
   // Create the csma links, from each terminal to the switch
@@ -122,74 +122,85 @@ main (int argc, char *argv[])
   NetDeviceContainer switchDevices1;
   // NetDeviceContainer terminalDevices2;
   NetDeviceContainer switchDevices2;
-  
-NetDeviceContainer switchDevices3;
+  NetDeviceContainer switchDevices3;
  
-   
-
+  OpenFlowSwitchHelper swtch1;
+  OpenFlowSwitchHelper swtch2;
+  OpenFlowSwitchHelper swtch3;
 
   NetDeviceContainer linkSwitchA = csma.Install (NodeContainer (csmaSwitch.Get(0),csmaSwitch.Get(1)));
   NetDeviceContainer linkSwitchB = csma.Install (NodeContainer (csmaSwitch.Get(1),csmaSwitch.Get(2)));
-  NetDeviceContainer linkSwitchC = csma.Install (NodeContainer (csmaSwitch.Get(2),csmaSwitch.Get(0)));
+  // NetDeviceContainer linkSwitchC = csma.Install (NodeContainer (csmaSwitch.Get(2),csmaSwitch.Get(0)));//making straight topology
 
-  switchDevices1.Add (linkSwitchA.Get (0));
-  switchDevices1.Add (linkSwitchC.Get (1));
+  //switchDevices1.Add (linkSwitchA.Get (0));
+  switchDevices1=swtch1.addDeviceSwitch(switchDevices1,csmaSwitch.Get(1)->GetDevice(0),linkSwitchA.Get(0));
 
-  switchDevices2.Add (linkSwitchA.Get (1));
-  switchDevices2.Add (linkSwitchB.Get (0));
+ // std::map<uint32_t,Mac48Address>::iterator st = switchdevicemap1.find(0);
 
-  switchDevices3.Add (linkSwitchB.Get (1));
-  switchDevices3.Add (linkSwitchC.Get (0));
+  //switchDevices1.Add (linkSwitchC.Get (1));
 
-  
-      NetDeviceContainer link = csma.Install (NodeContainer (terminals.Get (0), csmaSwitch.Get(0)));
-      terminalDevices.Add (link.Get (0));
-      switchDevices1.Add (link.Get (1));
-    
-      link = csma.Install (NodeContainer (terminals.Get (1), csmaSwitch.Get(1)));
-      terminalDevices.Add (link.Get (0));
-      switchDevices2.Add (link.Get (1));
+ // switchDevices2.Add (linkSwitchA.Get (1));
+  switchDevices2=swtch2.addDeviceSwitch(switchDevices2,csmaSwitch.Get(0)->GetDevice(0),linkSwitchA.Get(1));
+ // switchDevices2.Add (linkSwitchB.Get (0));
+  switchDevices2=swtch2.addDeviceSwitch(switchDevices2,csmaSwitch.Get(2)->GetDevice(0),linkSwitchB.Get(0));
 
-      link = csma.Install (NodeContainer (terminals.Get (2), csmaSwitch.Get(2)));
-      terminalDevices.Add (link.Get (0));
-      switchDevices3.Add (link.Get (1));
-    
+  //switchDevices3.Add (linkSwitchB.Get (1));
+  switchDevices3=swtch3.addDeviceSwitch(switchDevices3,csmaSwitch.Get(1)->GetDevice(0),linkSwitchB.Get(1));
+  //switchDevices3.Add (linkSwitchC.Get (0));
 
+  NetDeviceContainer link = csma.Install (NodeContainer (terminals.Get (0), csmaSwitch.Get(0)));
+  terminalDevices.Add (link.Get (0));
+  //switchDevices1.Add (link.Get (1));
+  switchDevices1=swtch1.addDeviceNode(switchDevices1,terminals.Get (0)->GetDevice(0),link.Get(1));
+
+ // NS_LOG_INFO ("device_added"<<Mac48Address::ConvertFrom(((link.Get(1))->GetDevice(0))->GetAddress()));
+
+
+  link = csma.Install (NodeContainer (terminals.Get (1), csmaSwitch.Get(2)));
+  terminalDevices.Add (link.Get (0));
+ // switchDevices3.Add (link.Get (1));
+  switchDevices3=swtch3.addDeviceNode(switchDevices3,terminals.Get (1)->GetDevice(0),link.Get(1));
+
+  NS_LOG_INFO ("switch_confusion"<<Mac48Address::ConvertFrom(((csmaSwitch.Get(2))->GetDevice(0))->GetAddress()));
   // Create the switch netdevice, which will do the packet switching
-  
-  
-/*  
+  /*
   for(int i=2; i<4; i++){
       NetDeviceContainer link = csma.Install (NodeContainer (terminals.Get (i), csmaSwitch.Get(1)));
       terminalDevices.Add (link.Get (0));
       switchDevices2.Add (link.Get (1));
   }
   */
-
+  //create controller
   Ptr<ns3::ofi::LearningController> controllerA = CreateObject<ns3::ofi::LearningController> ();
+  //Ptr<ns3::ofi::DropController> controllerA = CreateObject<ns3::ofi::DropController> ();.
    if (!timeout.IsZero ()) controllerA->SetAttribute ("ExpirationTime", TimeValue (timeout));
     
-  Ptr<ns3::ofi::LearningController> controllerB = CreateObject<ns3::ofi::LearningController> ();
-   if (!timeout.IsZero ()) controllerB->SetAttribute ("ExpirationTime", TimeValue (timeout));
+  // Ptr<ns3::ofi::LearningController> controllerB = CreateObject<ns3::ofi::LearningController> ();
+  //  if (!timeout.IsZero ()) controllerB->SetAttribute ("ExpirationTime", TimeValue (timeout));
     
-  Ptr<ns3::ofi::LearningController> controllerC = CreateObject<ns3::ofi::LearningController> ();
-   if (!timeout.IsZero ()) controllerC->SetAttribute ("ExpirationTime", TimeValue (timeout));
+  // Ptr<ns3::ofi::LearningController> controllerC = CreateObject<ns3::ofi::LearningController> ();
+  //  if (!timeout.IsZero ()) controllerC->SetAttribute ("ExpirationTime", TimeValue (timeout));
 
- 
+ //create openflow switch
   Ptr<Node> switchNode1 = csmaSwitch.Get (0);
-  OpenFlowSwitchHelper swtch1;
   
 
   Ptr<Node> switchNode2 = csmaSwitch.Get (1);
-  OpenFlowSwitchHelper swtch2;
+
 
   Ptr<Node> switchNode3 = csmaSwitch.Get (2);
-  OpenFlowSwitchHelper swtch3;
-  
-  
+
+  swtch1.toggleTrafficFlag();
+
+
+
+
+  swtch2.toggleTrafficFlag();
+  //install cntroller in switches
   swtch1.Install (switchNode1, switchDevices1, controllerA);
-  swtch2.Install (switchNode2, switchDevices2, controllerB);
-  swtch3.Install (switchNode3, switchDevices3, controllerC);
+
+  swtch2.Install (switchNode2, switchDevices2, controllerA);
+  swtch3.Install (switchNode3, switchDevices3, controllerA);
 
 
   
@@ -209,7 +220,29 @@ NetDeviceContainer switchDevices3;
   NS_LOG_INFO ("Assign IP Addresses.");
   Ipv4AddressHelper ipv4;
   ipv4.SetBase ("10.1.1.0", "255.255.255.0");
-  ipv4.Assign (terminalDevices);
+  Ipv4InterfaceContainer addresses=ipv4.Assign (terminalDevices);
+
+
+  //Ping application to be converted to configure function
+
+
+  //Mac48Address src_addr=((terminals.Get(0))->GetDevice(0))->GetAddress();
+  NS_LOG_INFO ("mac_addresszzzzzzzzzzzzzzzzzzzzzz"<<((terminals.Get(0))->GetDevice(0))->GetAddress());
+  /*NS_LOG_INFO ("Create pinger");
+  NS_LOG_INFO ("No of devices"<<terminals.GetN());
+  for(uint32_t i1=0;i1<terminals.GetN();++i1)
+  {
+	  for(uint32_t j1=i1+1;j1<terminals.GetN();++j1)
+	  {
+		  V4PingHelper ping = V4PingHelper(addresses.GetAddress (i1));
+	  	  ApplicationContainer app = ping.Install (terminals.Get (j1));
+	  	  app.Start (Seconds (2.0));
+	  	  app.Stop (Seconds (2.0));
+	  }
+
+  }*/
+  //creation of UDP traffic
+
 
   // ipv4.Assign(terminalDevices2);
    
@@ -239,96 +272,52 @@ NetDeviceContainer switchDevices3;
   // app = sink.Install (terminals.Get (0));
   // app.Start (Seconds (0.0));
 
-   
-NS_LOG_INFO ("Create Applications.");
+
+
+
+  //creation of TCP traffic
+
+    NS_LOG_INFO ("Create Applications.");
 
 
 //Create a BulkSendApplication and install it on node 0
 
-  uint16_t port = 9;  // well-known echo port number
+  //uint16_t port1 = 10; // well-known echo port number
 
   //terminals.Get(0).Ipv4Address()
- /* BulkSendHelper source ("ns3::TcpSocketFactory",
-                         InetSocketAddress (Ipv4Address("10.1.1.1"), port));
+ BulkSendHelper source ("ns3::TcpSocketFactory",
+                         InetSocketAddress (Ipv4Address("10.1.1.2"), 10));
   // Set the amount of data to send in bytes.  Zero is unlimited.
-  source.SetAttribute ("MaxBytes", UintegerValue (10));
-  ApplicationContainer sourceApps = source.Install (terminals.Get (1));
+  source.SetAttribute ("MaxBytes", UintegerValue (1));
+  ApplicationContainer sourceApps = source.Install (terminals.Get (0));
   sourceApps.Start (Seconds (1.0));
   sourceApps.Stop (Seconds (10.0));
+
+
+  BulkSendHelper source1 ("ns3::TcpSocketFactory",
+                           InetSocketAddress (Ipv4Address("10.1.1.2"), 2456));
+    // Set the amount of data to send in bytes.  Zero is unlimited.
+    source1.SetAttribute ("MaxBytes", UintegerValue (1));
+    ApplicationContainer sourceApps1 = source1.Install (terminals.Get (0));
+    sourceApps1.Start (Seconds (1.0));
+    sourceApps1.Stop (Seconds (10.0));
+
 
 //
 // Create a PacketSinkApplication and install it on node 1
 //
-  PacketSinkHelper sink ("ns3::TcpSocketFactory",
-                         InetSocketAddress (Ipv4Address::GetAny (), port));
+/*  PacketSinkHelper sink ("ns3::TcpSocketFactory",
+                         InetSocketAddress (Ipv4Address::GetAny (), 9));
   ApplicationContainer sinkApps = sink.Install (terminals.Get (1));
-  sinkApps.Start (Seconds (0.0));
-  sinkApps.Stop (Seconds (10.0));
-*/
-//UDP Socket
-  uint16_t port1 = 443;   // Discard port (RFC 863)
-  uint16_t port2 = 21;   // Discard port (RFC 863)
+  sinkApps.Start (Seconds (2.0));
+  sinkApps.Stop (Seconds (2.0));*/
 
-
-  OnOffHelper onoff ("ns3::TcpSocketFactory",
-                     Address (InetSocketAddress (Ipv4Address ("10.1.1.3"), port1)));
-  onoff.SetConstantRate (DataRate ("5kb/s"));
-
-  ApplicationContainer app1 = onoff.Install (terminals.Get (0));
-  // Start the application
-  app1.Start (Seconds (1.0));
-  app1.Stop (Seconds (5.0));
-  
-  OnOffHelper onoff ("ns3::TcpSocketFactory",
-                     Address (InetSocketAddress (Ipv4Address ("10.1.1.3"), port2)));
-  onoff.SetConstantRate (DataRate ("5kb/s"));
-
-  ApplicationContainer app2 = onoff.Install (terminals.Get (0));
-  // Start the application
-  app2.Start (Seconds (0.0));
-  app2.Stop (Seconds (10.0));
-
-  // Create an optional packet sink to receive these packets
-//   PacketSinkHelper sink1 ("ns3::UdpSocketFactory",
-//                          Address (InetSocketAddress (Ipv4Address::GetAny (), port)));
-//   app1 = sink1.Install (terminals.Get (2));
-//   app1.Start (Seconds (0.0));
-
-
-
-
-
-
-
-
-
-
-
-// //    NS_LOG_INFO ("Configure Tracing.");
-
-//   //
-//   // Configure tracing of all enqueue, dequeue, and NetDevice receive events.
-//   // Trace output will be sent to the file "openflow-switch.tr"
-//   //
-//   AsciiTraceHelper ascii;
-//    csma.EnableAsciiAll (ascii.CreateFileStream ("example1.tr"));
-
-//   //
-//   // Also configure some tcpdump traces; each interface will be traced.
-//   // The output files will be named:
-//   //     openflow-switch-<nodeId>-<interfaceId>.pcap
-//   // and can be read by the "tcpdump -r" command (use "-tt" option to
-//   // display timestamps correctly)
-//   //
-//    csma.EnablePcapAll ("example1", true);
-
-  //
-  // Now, do the actual simulation.
-  //
   NS_LOG_INFO ("Run Simulation.");
   Simulator::Run ();
   Simulator::Destroy ();
   NS_LOG_INFO ("Done.");
+/*  for(int i1=0;i1<100;++i1)
+  NS_LOG_INFO ("\n\n\n\n\n\n\n\n\n\n");*/
   #else
   NS_LOG_INFO ("NS-3 OpenFlow is not enabled. Cannot run simulation.");
   #endif // NS3_OPENFLOW

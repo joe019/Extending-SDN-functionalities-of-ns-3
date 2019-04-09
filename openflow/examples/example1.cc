@@ -16,13 +16,13 @@
 
 // Network topology
 //
-//        n0     n1
-//        |      |
-//       ----------
-//       | Switch |
-//       ----------
-//        |      |
-//        n2     n3
+//       Controller1  Controller2
+//            |           |
+//       ----------  ---------
+//       | Switch |--| Switch|
+//       ----------  --------- 
+//        |      |    |     | 
+//        n1     n2   n3    n4
 //
 //
 // - CBR/UDP flows from n0 to n1 and from n3 to n0
@@ -120,60 +120,49 @@ main (int argc, char *argv[])
   // Create the csma links, from each terminal to the switch
   NetDeviceContainer terminalDevices;
   NetDeviceContainer switchDevices1;
-  // NetDeviceContainer terminalDevices2;
   NetDeviceContainer switchDevices2;
    
 
-
+  // Connection between switches
   NetDeviceContainer linkSwitch = csma.Install (NodeContainer (csmaSwitch.Get(0),csmaSwitch.Get(1)));
-
   switchDevices1.Add (linkSwitch.Get (0));
   switchDevices2.Add (linkSwitch.Get (1));
 
+ // n1 and n2 connected to switch1
   for (int i = 0; i < 2; i++)
     {
       NetDeviceContainer link = csma.Install (NodeContainer (terminals.Get (i), csmaSwitch.Get(0)));
       terminalDevices.Add (link.Get (0));
       switchDevices1.Add (link.Get (1));
-    }
-
-  // Create the switch netdevice, which will do the packet switching
+    }  
   
-  
-  
+   // n3 and n4 connected to switch2
   for(int i=2; i<4; i++){
       NetDeviceContainer link = csma.Install (NodeContainer (terminals.Get (i), csmaSwitch.Get(1)));
       terminalDevices.Add (link.Get (0));
       switchDevices2.Add (link.Get (1));
   }
   
-  Ptr<ns3::ofi::LearningController> controller = CreateObject<ns3::ofi::LearningController> ();
-   if (!timeout.IsZero ()) controller->SetAttribute ("ExpirationTime", TimeValue (timeout));
-    
-
   Ptr<Node> switchNode1 = csmaSwitch.Get (0);
-  OpenFlowSwitchHelper swtch1;
-  
-
   Ptr<Node> switchNode2 = csmaSwitch.Get (1);
-  OpenFlowSwitchHelper swtch2;
+  OpenFlowSwitchHelper switch1,switch2;
 
-  Ptr<ns3::ofi::LearningController> cont2 = CreateObject<ns3::ofi::LearningController> ();
-  if (!timeout.IsZero ()) cont2->SetAttribute ("ExpirationTime", TimeValue (timeout));
+  // Creating two controllers
+  Ptr<ns3::ofi::LearningController> controller1 = CreateObject<ns3::ofi::LearningController> ();
+   if (!timeout.IsZero ()) controller1->SetAttribute ("ExpirationTime", TimeValue (timeout));
 
-
-  swtch1.Install (switchNode1, switchDevices1, controller);
-  swtch2.Install (switchNode2, switchDevices2, cont2);
-
-
- 
-
-
-
-
-
+  Ptr<ns3::ofi::LearningController> controller2 = CreateObject<ns3::ofi::LearningController> ();
+  if (!timeout.IsZero ()) controller2->SetAttribute ("ExpirationTime", TimeValue (timeout));
+    
+  //Linking switch1 with controller1
+  switch1.Install (switchNode1, switchDevices1, controller1);
+  
+  //Linking switch1 with controller1
+  switch2.Install (switchNode2, switchDevices2, controller2);
 
 
+
+   
   InternetStackHelper internet;
   internet.Install (terminals);
   

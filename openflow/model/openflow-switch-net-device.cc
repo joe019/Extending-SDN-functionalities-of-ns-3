@@ -966,22 +966,22 @@ OpenFlowSwitchNetDevice::SendErrorMsg (uint16_t type, uint16_t code, const void 
 void
 OpenFlowSwitchNetDevice::FlowTableLookup (sw_flow_key key, ofpbuf* buffer, uint32_t packet_uid, int port, bool send_to_controller)
 {
-  /*sw_flow *flow = chain_lookup (m_chain, &key);
- if (flow != 0)
+  sw_flow *flow = chain_lookup (m_chain, &key);
+  if (flow != 0)
     {
       NS_LOG_INFO ("Flow matched");
       flow_used (flow, buffer);
       ofi::ExecuteActions (this, packet_uid, buffer, &key, flow->sf_acts->actions, flow->sf_acts->actions_len, false);
     }
   else
-    {*/
-      NS_LOG_INFO ("Flow bad not matched.");
+    {
+      NS_LOG_INFO ("Flow not matched.");
 
       if (send_to_controller)
         {
           OutputControl (packet_uid, port, m_missSendLen, OFPR_NO_MATCH);
         }
- //  }
+    }
 
   // Clean up; at this point we're done with the packet.
   m_packetData.erase (packet_uid);

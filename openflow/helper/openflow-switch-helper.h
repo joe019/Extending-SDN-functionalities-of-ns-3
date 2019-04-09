@@ -40,6 +40,8 @@ public:
   /*
    * Construct a OpenFlowSwitchHelper
    */
+
+  typedef std::map<uint32_t,Mac48Address>t_portmap;
   OpenFlowSwitchHelper ();
 
   /**
@@ -92,9 +94,17 @@ public:
    */
   NetDeviceContainer
   Install (std::string nodeName, NetDeviceContainer c);
-
+  NetDeviceContainer
+  addDeviceSwitch (NetDeviceContainer switchNetDevice,Ptr< NetDevice > otherEnd,Ptr< NetDevice > myEnd);
+  NetDeviceContainer
+  addDeviceNode (NetDeviceContainer switchNetDevice,Ptr< NetDevice > otherEnd,Ptr< NetDevice > myEnd);
+  void
+  toggleTrafficFlag ();
 private:
   ObjectFactory m_deviceFactory; //!< Object factory
+  t_portmap switchlist,nodelist;
+  uint32_t high_traffic_flag = 0;
+
 };
 
 } // namespace ns3
