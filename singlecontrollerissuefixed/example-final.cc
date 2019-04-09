@@ -133,42 +133,33 @@ main (int argc, char *argv[])
   // NetDeviceContainer linkSwitchC = csma.Install (NodeContainer (csmaSwitch.Get(2),csmaSwitch.Get(0)));//making straight topology
 
   //switchDevices1.Add (linkSwitchA.Get (0));
-
   switchDevices1=swtch1.addDeviceSwitch(switchDevices1,csmaSwitch.Get(1)->GetDevice(0),linkSwitchA.Get(0));
-
 
  // std::map<uint32_t,Mac48Address>::iterator st = switchdevicemap1.find(0);
 
   //switchDevices1.Add (linkSwitchC.Get (1));
 
  // switchDevices2.Add (linkSwitchA.Get (1));
-
   switchDevices2=swtch2.addDeviceSwitch(switchDevices2,csmaSwitch.Get(0)->GetDevice(0),linkSwitchA.Get(1));
  // switchDevices2.Add (linkSwitchB.Get (0));
   switchDevices2=swtch2.addDeviceSwitch(switchDevices2,csmaSwitch.Get(2)->GetDevice(0),linkSwitchB.Get(0));
 
   //switchDevices3.Add (linkSwitchB.Get (1));
   switchDevices3=swtch3.addDeviceSwitch(switchDevices3,csmaSwitch.Get(1)->GetDevice(0),linkSwitchB.Get(1));
-  NS_LOG_INFO ("tingtingting"<<Mac48Address::ConvertFrom(csmaSwitch.Get(2)->GetDevice(0)->GetAddress()));
-
   //switchDevices3.Add (linkSwitchC.Get (0));
 
   NetDeviceContainer link = csma.Install (NodeContainer (terminals.Get (0), csmaSwitch.Get(0)));
   terminalDevices.Add (link.Get (0));
   //switchDevices1.Add (link.Get (1));
-
   switchDevices1=swtch1.addDeviceNode(switchDevices1,terminals.Get (0)->GetDevice(0),link.Get(1));
 
  // NS_LOG_INFO ("device_added"<<Mac48Address::ConvertFrom(((link.Get(1))->GetDevice(0))->GetAddress()));
 
 
-
   link = csma.Install (NodeContainer (terminals.Get (1), csmaSwitch.Get(2)));
   terminalDevices.Add (link.Get (0));
  // switchDevices3.Add (link.Get (1));
-
   switchDevices3=swtch3.addDeviceNode(switchDevices3,terminals.Get (1)->GetDevice(0),link.Get(1));
-
 
   NS_LOG_INFO ("switch_confusion"<<Mac48Address::ConvertFrom(((csmaSwitch.Get(2))->GetDevice(0))->GetAddress()));
   // Create the switch netdevice, which will do the packet switching
@@ -199,9 +190,15 @@ main (int argc, char *argv[])
 
   Ptr<Node> switchNode3 = csmaSwitch.Get (2);
 
-  
+  swtch1.toggleTrafficFlag();
+
+
+
+
+  swtch2.toggleTrafficFlag();
   //install cntroller in switches
   swtch1.Install (switchNode1, switchDevices1, controllerA);
+
   swtch2.Install (switchNode2, switchDevices2, controllerA);
   swtch3.Install (switchNode3, switchDevices3, controllerA);
 
@@ -225,14 +222,13 @@ main (int argc, char *argv[])
   ipv4.SetBase ("10.1.1.0", "255.255.255.0");
   Ipv4InterfaceContainer addresses=ipv4.Assign (terminalDevices);
 
-  //todo
+
   //Ping application to be converted to configure function
 
 
-
-  /*Mac48Address src_addr=Mac48Address::ConvertFrom(((terminals.Get(0))->GetDevice(0))->GetAddress());
-  NS_LOG_INFO ("mac_address"<<src_addr);
-  NS_LOG_INFO ("Create pinger");
+  //Mac48Address src_addr=((terminals.Get(0))->GetDevice(0))->GetAddress();
+  NS_LOG_INFO ("mac_addresszzzzzzzzzzzzzzzzzzzzzz"<<((terminals.Get(0))->GetDevice(0))->GetAddress());
+  /*NS_LOG_INFO ("Create pinger");
   NS_LOG_INFO ("No of devices"<<terminals.GetN());
   for(uint32_t i1=0;i1<terminals.GetN();++i1)
   {
@@ -244,10 +240,7 @@ main (int argc, char *argv[])
 	  	  app.Stop (Seconds (2.0));
 	  }
 
-
-=======
   }*/
-
   //creation of UDP traffic
 
 
@@ -284,23 +277,30 @@ main (int argc, char *argv[])
 
   //creation of TCP traffic
 
-
     NS_LOG_INFO ("Create Applications.");
 
 
 //Create a BulkSendApplication and install it on node 0
 
-  uint16_t port = 9;  // well-known echo port number
+  //uint16_t port1 = 10; // well-known echo port number
 
   //terminals.Get(0).Ipv4Address()
  BulkSendHelper source ("ns3::TcpSocketFactory",
-                         InetSocketAddress (Ipv4Address("10.1.1.2"), port));
+                         InetSocketAddress (Ipv4Address("10.1.1.2"), 10));
   // Set the amount of data to send in bytes.  Zero is unlimited.
   source.SetAttribute ("MaxBytes", UintegerValue (1));
   ApplicationContainer sourceApps = source.Install (terminals.Get (0));
   sourceApps.Start (Seconds (1.0));
-
   sourceApps.Stop (Seconds (10.0));
+
+
+  BulkSendHelper source1 ("ns3::TcpSocketFactory",
+                           InetSocketAddress (Ipv4Address("10.1.1.2"), 2456));
+    // Set the amount of data to send in bytes.  Zero is unlimited.
+    source1.SetAttribute ("MaxBytes", UintegerValue (1));
+    ApplicationContainer sourceApps1 = source1.Install (terminals.Get (0));
+    sourceApps1.Start (Seconds (1.0));
+    sourceApps1.Stop (Seconds (10.0));
 
 
 //
