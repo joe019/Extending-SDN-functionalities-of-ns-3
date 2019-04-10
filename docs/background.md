@@ -1,9 +1,9 @@
 ---
-title: About
+title: Background
 layout: default
 ---
 
-<div class="row content-row">
+<!-- <div class="row content-row">
 <div class="col-12 col-sm-4">
     <img src="{{ site.baseurl }}/images/bio.jpg">
 </div>
@@ -19,4 +19,4 @@ layout: default
 
     <p>Despite my efforts thus far, every day at Stanford I am reminded of just how little knowledge I really know and how many global problems there are waiting to be solved. Yet, my thirst for problem solving is exactly what drives me day in and day out to excel in my classes. Someday, what I learn about data mining will help me fight human trafficking, what I learn about optimization will create energy-efficient energy grids, and what I learn about computer vision will help self-driving cars prevent fatal car accidents. My dreams remain huge, and even though the steps now are no longer so easy, I am rising to this challenge.</p>
 </div>
-</div>
+</div> -->

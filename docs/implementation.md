@@ -5,9 +5,9 @@ use_fontawesome: true
 ---
 
 <!-- Research -->
-<h1 class="section-title">Research</h1>
+<!-- <h1 class="section-title">Research</h1> -->
 
-<div class="row content-row">
+<!-- <div class="row content-row">
 <div class="col-12 col-sm-4 image-wrapper">
     <img src="{{ site.baseurl }}/images/research_poverty_ermon.jpg">
 </div>
@@ -23,8 +23,8 @@ use_fontawesome: true
 </div>
 </div>
 <hr>
-
-<div class="row content-row">
+ -->
+<!-- <div class="row content-row">
 <div class="col-12 col-sm-4 image-wrapper">
     <img src="{{ site.baseurl }}/images/research_stereo_ihler.png">
 </div>
@@ -43,8 +43,8 @@ use_fontawesome: true
 </div>
 </div>
 <hr>
-
-<div class="row content-row">
+ -->
+<!-- <div class="row content-row">
 <div class="col-12 col-sm-4">
     <img src="{{ site.baseurl }}/images/research_foam_tanner.jpg">
 </div>
@@ -57,9 +57,9 @@ use_fontawesome: true
     <p><span class="bold">Presentation:</span> 43rd American Chemistry Society Western Regional Meeting, Pasadena, CA</p>
 </div>
 </div>
-
+ -->
 <!-- Experience -->
-<h1 class="section-title">Experience</h1>
+<!-- <h1 class="section-title">Experience</h1>
 
 <div class="row content-row">
 <div class="col-12 col-sm-4">
@@ -84,9 +84,9 @@ use_fontawesome: true
 </div>
 </div>
 <hr>
-
+ -->
 <!-- Projects -->
-<h1 class="section-title">Projects</h1>
+<!-- <h1 class="section-title">Projects</h1>
 
 <div class="row content-row">
 <div class="col-12 col-sm-4">
@@ -129,3 +129,4 @@ use_fontawesome: true
     </a>
 </div>
 </div>
+ -->
