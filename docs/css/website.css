@@ -1,0 +1,264 @@
+/*******************
+ * BASICS
+ ******************/
+.italic {
+  font-style: italic !important;
+}
+
+.bold {
+  font-weight: bold !important;
+}
+
+.center {
+  text-align: center !important;
+}
+
+a, a:link, a:visited, a:hover, a:active {
+  text-decoration: none !important;
+}
+
+.cardinal-red {
+  color: #8C1515 !important; /* Cardinal Red */
+}
+
+img {
+  max-width: 100%;
+}
+
+/*******************
+ * NAVBAR
+ *  todo: add colors
+ ******************/
+
+/*******************
+ * HEADERS - DONE
+ ******************/
+.header {
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  text-shadow: 0 0 1.5em black;
+}
+
+.header-page {
+  background-color: #159957; /* VAR: $header-bg-color */
+  background-image: linear-gradient(120deg, #155799, #159957); /* VARS: $header-bg-color, $header-bg-color-secondar */
+  padding: 1.25em 0; /* padding for top and bottom only */
+}
+
+.header-home {
+  background: url("../images/banner_home.jpg") center center/cover;
+}
+
+.page-description {
+  padding-top: 0.25em;
+}
+
+#profile-pic {
+  width: 90%;
+  max-width: 250px;
+  border-radius: 50%;
+  border: 8px solid white;
+  box-shadow: 0 0 1.5em black;
+}
+
+ul.contact {
+  margin: 0;
+}
+
+.contact li.list-inline-item {
+  margin: 1em 10px 0 10px;
+}
+
+.contact a,
+.contact a:visited,
+.contact a:focus {
+  color: white !important;
+  border: 3px solid white;
+  box-shadow: 0 0 1.5em black;
+  background-color: rgba(128, 128, 128, 0.4);
+}
+
+.contact a:hover,
+.contact a:active {
+  border-color: black !important;
+  background-color: black !important;
+  outline: 0;
+}
+
+/*******************
+ * FOOTER
+ ******************/
+.site-footer {
+  padding: 1em 0;
+}
+
+/*******************
+ * HOME
+ ******************/
+.post-list {
+  margin-left: 0;
+  list-style: none;
+}
+
+.post-list li {
+  margin-bottom: 1.5em;
+}
+
+.post-meta {
+  font-size: 0.8rem;
+  color: grey;
+}
+
+/*******************
+ * PROJECTS and ABOUT
+ ******************/
+.content-row img {
+  height: auto;
+  padding-bottom: 1em;
+}
+
+.content-row .image-wrapper {
+  text-align: center;
+}
+
+.content-row div a.btn {
+  margin-bottom: 0.5em;
+}
+
+/*******************
+ * GENERAL
+ ******************/
+.main-content {
+  word-wrap: break-word;
+}
+
+/* Make buttons rectangular: override the Bootstrap default */
+.btn {
+  border-radius: 0;
+  transition: all .3s ease-in-out;
+}
+
+h1.section-title {
+  color: #8C1515; /* Cardinal Red */
+  margin: 1em 0em 0.7em;
+}
+
+code {
+  padding: 2px 4px;
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 0.9rem;
+  color: #567482;
+  background-color: #f3f6fa;
+  border-radius: 0.3rem;
+}
+
+pre {
+  padding: 0.8rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font: 1rem Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  color: #567482;
+  word-wrap: normal;
+  background-color: #f3f6fa;
+  border: solid 1px #dce6f0;
+  border-radius: 0.3rem;
+}
+pre > code {
+  padding: 0;
+  margin: 0;
+  font-size: 0.9rem;
+  color: #567482;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.highlight {
+  margin-bottom: 1rem;
+}
+.highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.highlight pre,
+pre {
+  padding: 0.8rem;
+  overflow: auto;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  border-radius: 0.3rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+pre code,
+pre tt {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+pre code:before, pre code:after,
+pre tt:before,
+pre tt:after {
+  content: normal;
+}
+
+blockquote {
+  padding: 0 1rem;
+  margin-left: 0;
+  color: #819198;
+  border-left: 0.3rem solid #dce6f0;
+}
+blockquote > :first-child {
+  margin-top: 0;
+}
+blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+  -webkit-overflow-scrolling: touch;
+}
+table th {
+  font-weight: bold;
+}
+table th,
+table td {
+  padding: 0.5rem 1rem;
+  border: 1px solid #e9ebec;
+}
+
+dl {
+  padding: 0;
+}
+dl dt {
+  padding: 0;
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
+dl dd {
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+hr {
+  height: 2px;
+  padding: 0;
+  margin: 1rem 0;
+  background-color: #eff0f1;
+  border: 0;
+}
