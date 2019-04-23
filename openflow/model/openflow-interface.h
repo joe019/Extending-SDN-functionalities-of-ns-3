@@ -352,7 +352,9 @@ public:
   static TypeId GetTypeId (void);
   /** Destructor. */
   virtual ~Controller ();
-
+  typedef std::map<Mac48Address,Ptr<OpenFlowSwitchNetDevice>> switch_address_map_t;
+  switch_address_map_t switch_address_map;
+  void addmap(Ptr<OpenFlowSwitchNetDevice>,Mac48Address);
   /**
    * Adds a switch to the controller.
    *
@@ -470,8 +472,7 @@ public:
 
   virtual ~LearningController ()
   {
-    m_LearnStateSwitchMap.clear();
-    m_LearnStateSwitchMapSlow.clear();
+
   }
 
   void ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbuf* buffer);
@@ -488,12 +489,11 @@ protected:
   typedef std::map<Mac48Address, uint32_t > LastbroadcastportMap_t;//broadcast Source Data
   typedef std::map<Mac48Address, std::set<uint32_t> > PortList_t;  //List of Active Ports in switch
   typedef std::set<Mac48Address> SlowSwitchList_t;//List of High Traffic Switchs
-
   LearnStateSwitchMap_t m_LearnStateSwitchMap,m_LearnStateSwitchMapSlow;
   PortList_t m_allPortList,m_slowPortList;
   SlowSwitchList_t m_slowSwitchList;
   LastbroadcastportMap_t m_lastbroadcastMapport;
-  
+
   /**
   *This 
   */
@@ -508,6 +508,10 @@ protected:
   *This
   */
   void setaddress(Mac48Address switchid,Mac48Address oldswitchid,LearnStateSwitchMap_t *);
+  /**
+  *This
+  */
+  Mac48Address getMacaddressofswitchfromport(LearnStateSwitchMap_t *,Mac48Address switchid,uint32_t portno );
 
 };
 

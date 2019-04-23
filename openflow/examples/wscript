@@ -4,19 +4,3 @@ def build(bld):
    obj = bld.create_ns3_program('openflow-switch',
                                 ['openflow', 'csma', 'internet', 'applications'])
    obj.source = 'openflow-switch.cc'
-
-   obj = bld.create_ns3_program('example1',
-                                ['openflow', 'csma', 'internet', 'applications'])
-   obj.source = 'example1.cc'
-
-   obj = bld.create_ns3_program('example-final',
-                                ['openflow', 'csma', 'internet', 'applications'])
-   obj.source = 'example-final.cc'
-
-   obj = bld.create_ns3_program('single-controller-issue',
-                                ['openflow', 'csma', 'internet', 'applications'])
-   obj.source = 'single-controller-issue.cc'
-
-   obj = bld.create_ns3_program('pentagon',
-                                ['openflow', 'csma', 'internet', 'applications'])
-   obj.source = 'pentagon.cc'

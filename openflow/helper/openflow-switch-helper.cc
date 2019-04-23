@@ -49,7 +49,6 @@ NetDeviceContainer
 OpenFlowSwitchHelper::Install (Ptr<Node> node, NetDeviceContainer c, Ptr<ns3::ofi::Controller> controller)
 {
 	controller->create_path(Mac48Address::ConvertFrom((node->GetDevice(0)->GetAddress())),switchlist,nodelist,high_traffic_flag);
-	 NS_LOG_INFO ("******************************************************reaching");
   NS_LOG_FUNCTION_NOARGS ();
   NS_LOG_INFO ("**** Install switch device on node " << node->GetId ());
 
@@ -57,6 +56,8 @@ OpenFlowSwitchHelper::Install (Ptr<Node> node, NetDeviceContainer c, Ptr<ns3::of
   Ptr<OpenFlowSwitchNetDevice> dev = m_deviceFactory.Create<OpenFlowSwitchNetDevice> ();
   devs.Add (dev);
   node->AddDevice (dev);
+
+  //NS_LOG_INFO (dev<<"ring ringa rosses"<<Mac48Address::ConvertFrom(dev->GetAddress()) );
 
   NS_LOG_INFO ("**** Set up Controller");
   dev->SetController (controller);
@@ -66,13 +67,14 @@ OpenFlowSwitchHelper::Install (Ptr<Node> node, NetDeviceContainer c, Ptr<ns3::of
       NS_LOG_INFO ("**** Add SwitchPort " << *i);
       dev->AddSwitchPort (*i);
     }
+  controller->addmap(dev,Mac48Address::ConvertFrom(dev->GetAddress()));
+  //NS_LOG_INFO (dev<<"ring ringa rosses"<<Mac48Address::ConvertFrom(dev->GetAddress()) );
   return devs;
 }
 
 NetDeviceContainer
 OpenFlowSwitchHelper::Install (Ptr<Node> node, NetDeviceContainer c)
 {
-	 NS_LOG_INFO ("******************************************************reaching");
   NS_LOG_FUNCTION_NOARGS ();
   NS_LOG_INFO ("**** Install switch device on node " << node->GetId ());
 
@@ -92,7 +94,6 @@ OpenFlowSwitchHelper::Install (Ptr<Node> node, NetDeviceContainer c)
 NetDeviceContainer
 OpenFlowSwitchHelper::Install (std::string nodeName, NetDeviceContainer c)
 {
-	 NS_LOG_INFO ("******************************************************reaching");
   NS_LOG_FUNCTION_NOARGS ();
   Ptr<Node> node = Names::Find<Node> (nodeName);
   return Install (node, c);

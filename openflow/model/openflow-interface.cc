@@ -20,6 +20,8 @@
 #include "openflow-interface.h"
 #include "openflow-switch-net-device.h"
 
+#include "ns3/tcp-l4-protocol.h"
+
 namespace ns3 {
 
 NS_LOG_COMPONENT_DEFINE ("OpenFlowInterface");
@@ -676,10 +678,18 @@ Controller::AddSwitch (Ptr<OpenFlowSwitchNetDevice> swtch)
     }
   else
     {
-      m_switches.insert (swtch);
+	  m_switches.insert (swtch);
+	  NS_LOG_INFO (swtch->GetAddress());
+
     }
 }
+void
+Controller::addmap(Ptr<OpenFlowSwitchNetDevice> swtch ,Mac48Address addr)
+{
+	NS_LOG_INFO ("swtchid"<<swtch);
+	switch_address_map.insert(std::make_pair(addr,swtch));
 
+}
 void
 Controller::SendToSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, void * msg, size_t length)
 {
@@ -936,6 +946,21 @@ LearningController::create_path(Mac48Address switchid,std::map<uint32_t,Mac48Add
 		m_slowPortList.insert(std::make_pair (switchid,tportlist1));
 	}
 }
+
+Mac48Address
+LearningController::getMacaddressofswitchfromport(LearnStateSwitchMap_t *state,Mac48Address switchid,uint32_t portno )
+{
+	LearnStateSwitchMap_t::iterator st1=state->find(switchid);
+	 for(LearnState_t::iterator st2 = (st1->second).begin(); st2 != (st1->second).end(); st2++ )
+			{
+	        	if(((st2->second).port==portno)&&((st2->second).dist==-1))
+	        	{
+	        		return st2->first;
+	        	}
+			}
+	 return Mac48Address ("ff:ff:ff:ff:ff:ff");
+
+}
 void
 LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbuf* buffer)
 {
@@ -963,11 +988,14 @@ LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbu
       uint16_t out_port = OFPP_FLOOD;
       uint16_t in_port = ntohs (key.flow.in_port);
       int ftpflag=0;
-     if(buffer->l4!=NULL)
+     if(buffer->l3!=NULL)
       {
-    	 tcp_header* tcp_h = (tcp_header*)buffer->l4;
-    	 if(tcp_h->tcp_src<600)
+
+    	 ip_header* ip_h = (ip_header*)buffer->l3;
+
+    	if(ip_h->ip_proto == TcpL4Protocol::PROT_NUMBER)
     	 {
+    		NS_LOG_INFO("TCP Way");
     		 m_learnStateSwitchMapptr=&m_LearnStateSwitchMapSlow;
     		 ftpflag=1;
     	 }
@@ -1032,6 +1060,35 @@ LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbu
         {
           ofp_flow_mod* ofm = BuildFlow (key, opi->buffer_id, OFPFC_ADD, x, sizeof(x), OFP_FLOW_PERMANENT, m_expirationTime.IsZero () ? OFP_FLOW_PERMANENT : m_expirationTime.GetSeconds ());
          SendToSwitch (swtch, ofm, ofm->header.length);
+         //send list to all switches in path
+         Mac48Address nextswitchaddress=getMacaddressofswitchfromport(m_learnStateSwitchMapptr,switchid,out_port);
+
+         /*if(!nextswitchaddress.IsBroadcast ())
+        		 {
+        	 	 Ptr<OpenFlowSwitchNetDevice> swtchnew =(switch_address_map.find(nextswitchaddress))->second;
+        	 	NS_LOG_INFO ("switchaaaa"<<swtchnew);
+        		 }*/
+         NS_LOG_INFO ("curr switch"<<swtch);
+         Ptr<OpenFlowSwitchNetDevice> swtchnew ;
+         while((!nextswitchaddress.IsBroadcast ()))
+        	 {
+        	 swtchnew=(switch_address_map.find(nextswitchaddress))->second;
+        	Mac48Address newswtchid=Mac48Address::ConvertFrom(swtchnew->GetAddress());
+        	 LearnStateSwitchMap_t::iterator st1x=m_learnStateSwitchMapptr->find(newswtchid);
+        	 LearnState_t::iterator ls1 = (st1x->second).find(dst_addr);
+        	 uint32_t newoutport=(ls1->second).port;
+        	 ofp_action_output x[1];
+        	       x[0].type = htons (OFPAT_OUTPUT);
+        	       x[0].len = htons (sizeof(ofp_action_output));
+        	       x[0].port = newoutport;
+        	       ofp_flow_mod* ofm = BuildFlow (key, opi->buffer_id, OFPFC_ADD, x, sizeof(x), OFP_FLOW_PERMANENT, OFP_FLOW_PERMANENT );
+        	       SendToSwitch (swtchnew, ofm, ofm->header.length);
+        	       nextswitchaddress=getMacaddressofswitchfromport(m_learnStateSwitchMapptr,newswtchid,newoutport);
+        	 }
+
+
+
+
         }
         else
         {
@@ -1048,7 +1105,7 @@ LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbu
         {
         	if(*itrx!=in_port)
         	{
-        		x[0].port=*itrx;
+        	x[0].port=*itrx;
         	}
         }
 
@@ -1091,11 +1148,11 @@ LearningController::ReceiveFromSwitch (Ptr<OpenFlowSwitchNetDevice> swtch, ofpbu
         LearnState_t::iterator st2;
         
 
-      //   NS_LOG_INFO ("searching for mac in switch");
-      //   for(st2 = (st1->second).begin(); st2 != (st1->second).end(); st2++ )
-		    // {
-      //   	NS_LOG_INFO ("content of map 1"<<st2->first);
-		    // }
+        NS_LOG_INFO ("searching for mac in switch");
+        for(st2 = (st1->second).begin(); st2 != (st1->second).end(); st2++ )
+		     {
+         	NS_LOG_INFO ("content of map 1"<<st2->first);
+		     }
 
         if(st==(st1->second).end())
         { 
