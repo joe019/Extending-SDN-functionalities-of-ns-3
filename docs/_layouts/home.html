@@ -4,54 +4,129 @@ layout: default
 
 {{ content }}
 
-<html style="scroll-behavior: smooth">
+<html>
+<style>
+	.html {
+		scroll-behavior: smooth;
+	}
+
+	.tooltip {
+	  position: relative;
+	  display: inline-block;
+	}
+
+	.tooltip .tooltiptext {
+	  visibility: hidden;
+	  width: 140px;
+	  background-color: #555;
+	  color: #fff;
+	  text-align: center;
+	  border-radius: 6px;
+	  padding: 5px;
+	  position: absolute;
+	  z-index: 1;
+	  bottom: 150%;
+	  left: 50%;
+	  margin-left: -75px;
+	  opacity: 0;
+	  transition: opacity 0.3s;
+	}
+
+	.tooltip .tooltiptext::after {
+	  content: "";
+	  position: absolute;
+	  top: 100%;
+	  left: 50%;
+	  margin-left: -5px;
+	  border-width: 5px;
+	  border-style: solid;
+	  border-color: #555 transparent transparent transparent;
+	}
+
+	.tooltip:hover .tooltiptext {
+	  visibility: visible;
+	  opacity: 1;
+	}
+</style>
+
 
 <h2>Introduction</h2>
-<p>This project is an attempt to extend some SDN functionalities present in ns-3. <a href="#contact">We</a> have done this as part of our Major Project in the final year of our undergraduate degree at NITK. If you are new to these jargons (SDN, ns-3), don't worry! We have made an exclusive section just for you :) </p>
+	<p>This project is an attempt to extend some SDN functionalities present in ns-3. <a href="#contact">We</a> have done this as part of our Major Project in the final year of our undergraduate degree at NITK. If you are new to these jargons (SDN, ns-3), don't worry! We have made an exclusive section just for you :) </p>
 
 <h2>Overview</h2>
-<p>In the current implementation of OpenFlow in ns-3, a controller can’t know the complete topology of a network before a node starts sending packets to another node, as shown in the below figure.</p>
-<div class="row content-row">
-	<div class="col-12 col-sm-4"></div>
-	<div class="col-12 col-sm-4">
-	    <img src="{{ site.baseurl }}/images/beforeProactive.png">
+	<p>In the current implementation of OpenFlow in ns-3, a controller can’t know the complete topology of a network before a node starts sending packets to another node, as shown in the below figure.</p>
+	<div class="row content-row">
+		<div class="col-12 col-sm-4"></div>
+		<div class="col-12 col-sm-4">
+		    <img src="{{ site.baseurl }}/images/beforeProactive.png">
+		</div>
+		<div class="col-12 col-sm-4"></div>
 	</div>
-	<div class="col-12 col-sm-4"></div>
-</div>
 
-<p>Our implementation focuses on resolving the above issue by bringing in proactive learning for the controller, as depicted in the figure below.</p>
-<div class="row content-row">
-	<div class="col-12 col-sm-4"></div>
-	<div class="col-12 col-sm-4">
-	    <img src="{{ site.baseurl }}/images/afterProactive.png">
+	<p>Our implementation focuses on resolving the above issue by bringing in proactive learning for the controller, as depicted in the figure below.</p>
+	<div class="row content-row">
+		<div class="col-12 col-sm-4"></div>
+		<div class="col-12 col-sm-4">
+		    <img src="{{ site.baseurl }}/images/afterProactive.png">
+		</div>
+		<div class="col-12 col-sm-4"></div>
 	</div>
-	<div class="col-12 col-sm-4"></div>
-</div>
 
-<p>Also, currently ns-3 limits the use of a single switch per a controller. We have added the functionality to support multiple switches per a controller.</p>
+	<p>Also, currently ns-3 limits the use of a single switch per a controller. We have added the functionality to support multiple switches per a controller.</p>
 
 <h2 id="contact">Contact us</h2>
-<div class="row content-row">
-	<div class="col-12 col-sm-4">
-		Aswanth: <a onclick="myFunction()" id="myInput">ppaswanth3@gmail.com</a> 
+	<div class="row content-row">
+		<div class="col-12 col-sm-4">
+			Aswanth: 
+			<input type="text" value="ppaswanth3@gmail.com" id="myInput">
+
+			<div class="tooltip">
+				<button onclick="myFunction()" onmouseout="outFunc()">
+				  <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+				  Copy email
+				</button>
+			</div>
+		</div>
+		<div class="col-12 col-sm-4">
+			Gautham: 
+			<input type="text" value="gauthamm1997@gmail.com" id="myInput">
+
+			<div class="tooltip">
+				<button onclick="myFunction()" onmouseout="outFunc()">
+				  <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+				  Copy email
+				</button>
+			</div>
+		</div>
+		<div class="col-12 col-sm-4">
+			Joe: 
+			<input type="text" value="joeantony019@gmail.com" id="myInput">
+
+			<div class="tooltip">
+				<button onclick="myFunction()" onmouseout="outFunc()">
+				  <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+				  Copy email
+				</button>
+			</div>
+		</div>
 	</div>
-	<div class="col-12 col-sm-4">
-		Gautham: <a onclick="myFunction()" id="myInput">gauthamm1997@gmail.com</a>
-	</div>
-	<div class="col-12 col-sm-4">
-		Joe: <a onclick="myFunction()" id="myInput">joeantony019@gmail.com</a>
-	</div>
-</div>
 
 </html>
-
-<!-- <input type="text" value="Hello World" id="myInput"> -->
 
 <script>
 function myFunction() {
   var copyText = document.getElementById("myInput");
   copyText.select();
   document.execCommand("copy");
-  alert("Copied the text: " + copyText.value);
+  
+  var tooltip = document.getElementById("myTooltip");
+  tooltip.innerHTML = "Copied: " + copyText.value;
+}
+
+function outFunc() {
+  var tooltip = document.getElementById("myTooltip");
+  tooltip.innerHTML = "Copy to clipboard";
 }
 </script>
+
+</html>
