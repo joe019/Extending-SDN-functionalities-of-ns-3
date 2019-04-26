@@ -5,14 +5,27 @@ layout: default
 {{ content }}
 
 <h2>About</h2>
-This project is an attempt to extend some SDN functionalities present in ns-3. We have done this as part of our Major Project in the final year of our undergraduate degree. If you are new to these jargons (SDN, ns-3), don't worry! We have made an exclusive section just for you :) 
+<p>This project is an attempt to extend some SDN functionalities present in ns-3. We have done this as part of our Major Project in the final year of our undergraduate degree. If you are new to these jargons (SDN, ns-3), don't worry! We have made an exclusive section just for you :) </p>
 
 <h2>Introduction</h2>
-In the current implementation of OpenFlow in ns-3, a controller can’t know the complete topology of a network before a node starts sending packets to another node, as shown in the below figure.<br>
-<img src="{{ site.baseurl }}/images/beforeProactive.png" align="middle"><br>
-Our implementation focuses on resolving the above issue by bringing in proactive learning for the controller, as depicted in the figure below.<br>
-<img src="{{ site.baseurl }}/images/afterProactive.png" align="middle"><br>
+<p>In the current implementation of OpenFlow in ns-3, a controller can’t know the complete topology of a network before a node starts sending packets to another node, as shown in the below figure.</p>
+<div class="row content-row">
+	<div class="col-12 col-sm-4"></div>
+	<div class="col-12 col-sm-4">
+	    <img src="{{ site.baseurl }}/images/beforeProactive.png">
+	</div>
+	<div class="col-12 col-sm-4"></div>
+</div>
 
-Also, currently ns-3 limits the use of a single switch per a controller. We have added the functionality to support multiple switches per a controller. 
+<p>Our implementation focuses on resolving the above issue by bringing in proactive learning for the controller, as depicted in the figure below.</p>
+<div class="row content-row">
+	<div class="col-12 col-sm-4"></div>
+	<div class="col-12 col-sm-4">
+	    <img src="{{ site.baseurl }}/images/afterProactive.png">
+	</div>
+	<div class="col-12 col-sm-4"></div>
+</div>
+
+<p>Also, currently ns-3 limits the use of a single switch per a controller. We have added the functionality to support multiple switches per a controller.</p>
 
 </ul>
