@@ -6,7 +6,7 @@ layout: default
 
 <html>
 <style>
-	.html {
+	html {
 		scroll-behavior: smooth;
 	}
 
@@ -47,6 +47,10 @@ layout: default
 	  visibility: visible;
 	  opacity: 1;
 	}
+
+	#myInput1, #myInput2, #myInput3 {
+		display: none;
+	}
 </style>
 
 
@@ -76,47 +80,82 @@ layout: default
 
 <h2 id="contact">Contact us</h2>
 	Aswanth:
-	<input type="text" value="ppaswanth3@gmail.com" id="myInput">
-	<div class="tooltip">
-		<button onclick="myFunction()" onmouseout="outFunc()">
-		  <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
-		  Copy email
-		</button>
-	</div>
-	<br>
-<!-- 	Gautham:
-	<input type="text" value="gauthamm1997@gmail.com" id="myInput">
-	<div class="tooltip">
-		<button onclick="myFunction()" onmouseout="outFunc()">
-		  <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
-		  Copy email
-		</button>
-	</div>
-	<br>
-	Joe:
-	<input type="text" value="joeantony019@gmail.com" id="myInput">
-	<div class="tooltip">
-		<button onclick="myFunction()" onmouseout="outFunc()">
-		  <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
-		  Copy email
-		</button>
-	</div> -->
-		
 
-</html>
+	<input type="text" value="ppaswanth3@gmail.com" id="myInput1">
+
+	<div class="tooltip">
+	<button onclick="myFunction1()" onmouseout="outFunc1()">
+	  <span class="tooltiptext" id="myTooltip1">Copy to clipboard</span>
+	  E-mail
+	  </button>
+	</div>
+
+	<br>
+
+	Gautham:
+
+	<input type="text" value="gauthamm1997@gmail.com" id="myInput2">
+
+	<div class="tooltip">
+	<button onclick="myFunction2()" onmouseout="outFunc2()">
+	  <span class="tooltiptext" id="myTooltip2">Copy to clipboard</span>
+	  E-mail
+	  </button>
+	</div>
+
+	<br>
+
+	Joe:
+
+	<input type="text" value="joeantony019@gmail.com" id="myInput3">
+
+	<div class="tooltip">
+	<button onclick="myFunction3()" onmouseout="outFunc3()">
+	  <span class="tooltiptext" id="myTooltip3">Copy to clipboard</span>
+	  E-mail
+	  </button>
+	</div>
 
 <script>
-function myFunction() {
-  var copyText = document.getElementById("myInput");
+function myFunction1() {
+  var copyText = document.getElementById("myInput1");
   copyText.select();
   document.execCommand("copy");
   
-  var tooltip = document.getElementById("myTooltip");
+  var tooltip = document.getElementById("myTooltip1");
   tooltip.innerHTML = "Copied: " + copyText.value;
 }
 
-function outFunc() {
-  var tooltip = document.getElementById("myTooltip");
+function myFunction2() {
+  var copyText = document.getElementById("myInput2");
+  copyText.select();
+  document.execCommand("copy");
+  
+  var tooltip = document.getElementById("myTooltip2");
+  tooltip.innerHTML = "Copied: " + copyText.value;
+}
+
+function myFunction3() {
+  var copyText = document.getElementById("myInput3");
+  copyText.select();
+  document.execCommand("copy");
+  
+  var tooltip = document.getElementById("myTooltip3");
+  tooltip.innerHTML = "Copied: " + copyText.value;
+}
+
+function outFunc1() {
+  var tooltip = document.getElementById("myTooltip1");
+  tooltip.innerHTML = "Copy to clipboard";
+}
+
+function outFunc2() {
+  var tooltip = document.getElementById("myTooltip2");
+  tooltip.innerHTML = "Copy to clipboard";
+}
+
+function outFunc3() {
+  var tooltip = document.getElementById("myTooltip3");
   tooltip.innerHTML = "Copy to clipboard";
 }
 </script>
