@@ -10,7 +10,7 @@ layout: default
 		scroll-behavior: smooth;
 	}
 
-	.tooltip {
+/*	.tooltip {
 	  position: relative;
 	  display: inline-block;
 	}
@@ -46,7 +46,7 @@ layout: default
 	.tooltip:hover .tooltiptext {
 	  visibility: visible;
 	  opacity: 1;
-	}
+	}*/
 
 	#myInput1, #myInput2, #myInput3 {
 		display: none;
@@ -84,18 +84,19 @@ layout: default
 	<input type="text" value="ppaswanth3@gmail.com" id="myInput1">
 
 <!-- 	<div class="tooltip">
-	<button onclick="myFunction1()" onmouseout="outFunc1()">
 	  <span class="tooltiptext" id="myTooltip1">Copy to clipboard</span>
 	  E-mail
-	</button>
 	</div> -->
-	<ul class="contact list-inline banner-social-buttons">
-	  <li class="list-inline-item">
-	    <a class="btn btn-secondary" onclick="myFunction1()" onmouseout="outFunc1()" id="myTooltip1">
-	      <i class="far fa-envelope"></i> Email
-	    </a>
-	  </li>
-	</ul>
+	<div class="tooltip">
+		<ul class="contact list-inline banner-social-buttons">
+		  <li class="list-inline-item">
+		    <a class="btn btn-secondary" onclick="myFunction1()" onmouseout="outFunc1()">
+		      <span class="tooltiptext" id="myTooltip1">Copy to clipboard</span>
+		      <i class="far fa-envelope"></i> Email
+		    </a>
+		  </li>
+		</ul>
+	</div>
 	<br>
 
 	Gautham:
