@@ -18,10 +18,10 @@ tree is generated.
 switches and these can be accessed only by a particular traffic.
  </ul>
  <div class="row content-row">
-	<div class="col-12 col-sm-4"></div>
-	<div class="col-12 col-sm-4">
+	<div class="col-12 col-sm-2"></div>
+	<div class="col-12 col-sm-8">
 	    <img src="{{ site.baseurl }}/images/proactive.png" alt="proactive topology output">
-    <p> this is the first packet transfered but there is details of all the end nodes and neighbour switch in the map</p>
+    <p> This is the Screenshot when first packet transfered and reaches controller from first switch,  The details of all the end nodes and neighbour switches is already in the Table</p>
 	</div>
-	<div class="col-12 col-sm-4"></div>
+	<div class="col-12 col-sm-2"></div>
 </div>
