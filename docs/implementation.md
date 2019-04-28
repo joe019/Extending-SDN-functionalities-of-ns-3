@@ -21,7 +21,7 @@ switches and these can be accessed only by a particular traffic.
 	<div class="col-12 col-sm-2"></div>
 	<div class="col-12 col-sm-8">
 	    <img src="{{ site.baseurl }}/images/proactive.png" alt="proactive topology output">
-    <p> This is the Screenshot when first packet transfered and reaches controller from first switch,<br> The details of all the end nodes and neighbour switches is already in the Table</p>
+    <p> This is the Screenshot which shows when controller call is made from first switch for first time,<br> The details of all the end nodes and neighbour switches is already in the table in controller. </p>
 	</div>
 	<div class="col-12 col-sm-2"></div>
 </div>
@@ -30,7 +30,7 @@ switches and these can be accessed only by a particular traffic.
 	<div class="col-12 col-sm-2"></div>
 	<div class="col-12 col-sm-8">
 	    <img src="{{ site.baseurl }}/images/screenshot.png" alt="all switch one entry output">
-    <p> This is the Screenshot we can see in a single controller call flow table entries are made in all the switches in the path of the packet</p>
+    <p> In this the Screenshot we can see in a single controller call flow table entries are made in all the switches in the path of the packet.</p>
 	</div>
 	<div class="col-12 col-sm-2"></div>
 </div>
