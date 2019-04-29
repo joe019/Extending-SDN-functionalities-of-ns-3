@@ -10,20 +10,17 @@
 ### Website
 https://joe019.github.io/Extending-SDN-functionality-in-ns-3/
 
-### Overview
-This project is an attempt to extend some SDN functionalities present in ns-3
-
 ### Steps to reproduce
 1. Installing ns-3 and enabling OpenFlow integration <br>
 Check out this [link](https://github.com/joe019/Extending-SDN-functionality-in-ns-3/wiki/5.-ns-3)!
-2. Clone this repository
+2. Clone this repository <br>
 git clone https://github.com/joe019/Extending-SDN-functionality-in-ns-3.git
-3. Copy the contents
+3. Copy contents <br>
 Goto your ns3 workspace and replace the folder "src/openflow" with "Extending-SDN-functionality-in-ns-3/openflow/
 " from the cloned repository.
-4. Run an example 
-./waf --run \"openflow-switch --verbose\"
-Any other example can be run by replacing "openflow-switch" with the example name
+4. Run an example <br>
+./waf --run \"openflow-switch --verbose\"<br>
+Any other example can be run by replacing "openflow-switch" with the example name.
 
 
 ## References
