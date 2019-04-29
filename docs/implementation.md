@@ -4,26 +4,19 @@ layout: default
 use_fontawesome: true
 ---
 <h2>Steps to reproduce</h2>
-The following steps have to be used to recreate the output
- <ol>
-  
+The following steps have to be used to recreate the output.
+<h3> Steps to reproduce </h3>
+1. Installing ns-3 and enabling OpenFlow integration
+<p>Check out this <a href="https://github.com/joe019/Extending-SDN-functionality-in-ns-3/wiki/5.-ns-3">link</a>!<br></p>
+2. Clone the repository <br>
+<p><code>git clone https://github.com/joe019/Extending-SDN-functionality-in-ns-3.git</code><br></p>
+3. Copy contents <br>
+<p>Goto your ns3 workspace and replace the folder <code>"src/openflow"</code><br> with <code>"Extending-SDN-functionality-in-ns-3/openflow/"</code><br> from the cloned repository.</p>
+4. Run an example <br>
+<p><code>./waf --run \"openflow-switch --verbose\"</code><br></p>
+<p>Any other example can be run by replacing "openflow-switch" with the example name.</p>
 
-<li> ns3 installation
-  Follow the steps given in https://www.nsnam.org/docs/tutorial/html/getting-started.html </li>
-<li> openflow configuration
-  https://www.nsnam.org/docs/models/html/openflow-switch.html#building-ofsid
-  now the basic configuration is ready </li>
-<li> Applying the modified code</li>
-<ul>
-<li> goto a new directory and clone the repository</li>
-  <li> git clone https://github.com/joe019/Extending-SDN-functionality-in-ns-3.git</li>
- <li> goto your ns3 workspace and replace the folder "src/openflow" with the "Extending-SDN-functionality-in-ns-3/openflow/
-" from the cloned repository</li>
-</ul>
-<li> you can run the examples using the command 
- >./waf --run \"openflow-switch --verbose\"</li>
-<li> any other example can be run by replacing openflow-switch with the example name
-</ol> 
+
 <h2>Proactive Topology</h2>
 <p> A node learns the path to destination using the broadcast messages sent during ARP
 request. This gives the controller very less capability to decide the path to be used
