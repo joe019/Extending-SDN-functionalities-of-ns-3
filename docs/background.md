@@ -3,9 +3,6 @@ title: Background
 layout: default
 ---
 
-<h2>ns-3</h2>
-<p> ns-3 is a discrete-event network simulator. If, for example, an event scheduled for simulation time "100 seconds" is executed, and the next event is not scheduled until "200 seconds", the simulator will immediately jump from 100 seconds to 200 seconds (of simulation time) to execute the next event. This is what is meant by "discrete-event" simulator. </p>
-
 <h2>SDN</h2>
 <p>SDN (Software Defined Networking) refers to the physical separation of the network control plane from the forwarding plane, and where a control plane controls several devices.
 <ul>
@@ -20,6 +17,9 @@ The control plane consists of one or more controllers which are considered as th
 	</div>
 	<div class="col-12 col-sm-4"></div>
 </div>
+
+<h2>ns-3</h2>
+<p> ns-3 is a discrete-event network simulator. If, for example, an event scheduled for simulation time "100 seconds" is executed, and the next event is not scheduled until "200 seconds", the simulator will immediately jump from 100 seconds to 200 seconds (of simulation time) to execute the next event. This is what is meant by "discrete-event" simulator. </p>
 
 <h2>OpenFlow</h2>
 <p>OpenFlow is considered one of the first software-defined networking standards. It originally defined the communication protocol in SDN environments that enables an SDN controller to directly interact with the forwarding plane of network devices such as switches and routers, both physical and virtual (hypervisor-based).
@@ -55,7 +55,7 @@ OpenFlow:
 
 <code>./waf --run  first</code>
 
-<h3>3. Enable Openflow integration:</h3>
+<h3>3. Enable Openflow integration</h3>
 
 <p>In order to use the OpenFlowSwitch module, you must create and link the OFSID (OpenFlow Software Implementation Distribution) to ns-3. To do this:</p>
 
@@ -91,4 +91,3 @@ where <code>pathToOpenflow=/home/gian/openflow or /home/joe019/7th\ sem/projects
 <p>To see it in detailed logging, run:</p>
 
 <code>./waf --run "openflow-switch -v"</code><br>
-</ol>

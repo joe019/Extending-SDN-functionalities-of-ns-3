@@ -5,7 +5,6 @@ use_fontawesome: true
 ---
 <h2>Steps to reproduce</h2>
 The following steps have to be used to recreate the output.
-<h3> Steps to reproduce </h3>
 1. Installing ns-3 and enabling OpenFlow integration
 <p>Check out this <a href="https://github.com/joe019/Extending-SDN-functionality-in-ns-3/wiki/5.-ns-3">link</a>!<br></p>
 2. Clone the repository <br>
