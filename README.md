@@ -2,8 +2,16 @@
 ## Course: Major Project (MP)
 ## Course Code: CO449 (MP-I), CO499 (MP-II)
 
+### Team
+#### ASWANTH P P (15CO112)
+#### GAUTHAM M  (15CO118)
+#### JOE ANTONY (15CO220)
+
 ### Website
 https://joe019.github.io/Extending-SDN-functionality-in-ns-3/
+
+### Overview
+This project is an attempt to extend some SDN functionalities present in ns-3
 
 ### Steps to reproduce
 1. ns3 installation
