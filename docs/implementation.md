@@ -5,12 +5,16 @@ use_fontawesome: true
 ---
 <h2>Steps to reproduce</h2>
 The following steps have to be used to recreate the output.
+
 1. Installing ns-3 and enabling OpenFlow integration
 <p>Check out this <a href="https://github.com/joe019/Extending-SDN-functionality-in-ns-3/wiki/5.-ns-3">link</a>!<br></p>
+
 2. Clone the repository <br>
 <p><code>git clone https://github.com/joe019/Extending-SDN-functionality-in-ns-3.git</code><br></p>
+
 3. Copy contents <br>
 <p>Goto your ns3 workspace and replace the folder <code>"src/openflow"</code><br> with <code>"Extending-SDN-functionality-in-ns-3/openflow/"</code><br> from the cloned repository.</p>
+
 4. Run an example <br>
 <p><code>./waf --run \"openflow-switch --verbose\"</code><br></p>
 <p>Any other example can be run by replacing "openflow-switch" with the example name.</p>
