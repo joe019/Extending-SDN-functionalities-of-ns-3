@@ -6,7 +6,7 @@ use_fontawesome: true
 <h2>Steps to reproduce</h2>
 The following steps have to be used to recreate the output.
 <ul>
-	<li>Instal ns-3 and enable OpenFlow integration</li>
+	<li>Install ns-3 and enable OpenFlow integration</li>
 	<p>Check out this <a href="https://github.com/joe019/Extending-SDN-functionality-in-ns-3/wiki/5.-ns-3">link</a>!</p>
 	<li>Clone the repository</li>
 	<p><code>git clone https://github.com/joe019/Extending-SDN-functionality-in-ns-3.git</code><br></p>
@@ -34,7 +34,7 @@ of the network topology ahead of packet transfer. </p>
 	<div class="col-12 col-sm-2"></div>
 	<div class="col-12 col-sm-6">
 		<img src="{{ site.baseurl }}/images/proactive.png" alt="proactive topology output">
-	    <p> <i>When call to controller is made from a switch for the first time,<br> the details of all the neighbouring nodes and switches are already in the table at the controller.</i> </p>
+	    <p> <i>When call to controller is made from a switch for the first time, the details of all the neighbouring nodes and switches are already in the table at the controller.</i> </p>
 	</div>
 	<div class="col-12 col-sm-4"></div>
 </div>
@@ -45,7 +45,7 @@ of the network topology ahead of packet transfer. </p>
 	<div class="col-12 col-sm-2"></div>
 	<div class="col-12 col-sm-6">
 		<img src="{{ site.baseurl }}/images/screenshot.png" alt="all switch one entry output">
-	    <p> Flow table entries are made in all the switches in the path of the packet in the first controller call.</p>
+	    <p> <i>Flow table entries are made in all the switches in the path of the packet in the first controller call.</i></p>
 	</div>
 	<div class="col-12 col-sm-4"></div>
 </div>
