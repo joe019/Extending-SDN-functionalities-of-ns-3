@@ -30,7 +30,7 @@ OpenFlow:
 	<li>allows switches from different vendors - often each with their own proprietary interfaces and scripting languages - to be managed remotely using a single, open protocol.</li>
 </ul>
 
-<h2 id="ns-3">Getting started with OpenFlow in ns-3</h2>
+<!-- <h2 id="ns-3">Getting started with OpenFlow in ns-3</h2>
 
 <h3>1. Download ns-3</h3>
 
@@ -90,4 +90,4 @@ where <code>pathToOpenflow=/home/gian/openflow or /home/joe019/7th\ sem/projects
 
 <p>To see it in detailed logging, run:</p>
 
-<code>./waf --run "openflow-switch -v"</code><br>
+<code>./waf --run "openflow-switch -v"</code><br> -->
