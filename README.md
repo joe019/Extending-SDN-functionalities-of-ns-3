@@ -8,15 +8,15 @@
 #### JOE ANTONY (15CO220)
 
 ### Website
-https://joe019.github.io/Extending-SDN-functionality-in-ns-3/
+https://joe019.github.io/Extending-SDN-functionalities-of-ns-3/
 
 ### Steps to reproduce
 1. Installing ns-3 and enabling OpenFlow integration <br>
-Check out this [link](https://github.com/joe019/Extending-SDN-functionality-in-ns-3/wiki/5.-ns-3)!
+Check out this [link](https://github.com/joe019/Extending-SDN-functionalities-of-ns-3/wiki/5.-ns-3)!
 2. Clone this repository <br>
-git clone https://github.com/joe019/Extending-SDN-functionality-in-ns-3.git
+git clone https://github.com/joe019/Extending-SDN-functionalities-of-ns-3.git
 3. Copy contents <br>
-Goto your ns3 workspace and replace the folder "src/openflow" with "Extending-SDN-functionality-in-ns-3/openflow/
+Goto your ns3 workspace and replace the folder "src/openflow" with "Extending-SDN-functionalities-of-ns-3/openflow/
 " from the cloned repository.
 4. Run an example <br>
 ./waf --run \"openflow-switch --verbose\"<br>
